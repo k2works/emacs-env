@@ -1,7 +1,8 @@
 {
   "run_list": [
     "recipe[emacs]",
-    "recipe[emacs24]"
+    "recipe[emacs24]",
+    "recipe[emacs-env]"
   ],
   "automatic": {
     "ipaddress": "emacs-env"
