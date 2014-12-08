@@ -14,7 +14,7 @@ directory "/home/vagrant/.emacs.d" do
 end
 
 if File.exists?("/home/vagrant/.emacs.d")
-  %w{conf elisp elpa public_repos etc info other}.each do |dir|
+  %w{conf elisp elpa public_repos etc info other backups}.each do |dir|
     directory "/home/vagrant/.emacs.d/#{dir}" do
       owner  "vagrant"
       group  "vagrant"
@@ -26,7 +26,7 @@ if File.exists?("/home/vagrant/.emacs.d")
   cookbook_file "/home/vagrant/.emacs.d/init.el" do
     source "emacs24/init.el"
     owner  "vagrant"
-    group  "vagrant"    
+    group  "vagrant"
     mode 00644
   end
 

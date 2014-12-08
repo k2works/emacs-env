@@ -74,16 +74,17 @@
 ;; リージョンの背景色を変更
 (set-face-background 'region "darkgreen")
 ;; 表示テーマの設定
-(when (require 'color-theme nil t)  
+(when (require 'color-theme nil t)
   ;; テーマを読み込むための設定
   (color-theme-initialize))
 
 ;; フォントの設定
 ;; 日本語のフォントをヒラギノ明朝Proに
-(set-fontset-font
- nil 'japanese-jisx0208
+;;(set-fontset-font
+;; nil 'japanese-jisx0208
  ;; 英語名の場合
- (font-spec :family "ヒラギノ明朝 Pro"))
+;; (font-spec :family "Hiragino Mincho Pro"))
+ ;; (font-spec :family "ヒラギノ明朝 Pro"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ハイライトの設定                                          ;;
@@ -116,15 +117,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; バックアップとオートセーブの設定
 ;; バックアップファイルを作成しない
-(setq make-backup-file nil) ; 初期値はt
+;;(setq make-backup-file nil) ; 初期値はt
 ;; オートセーブファイルは作らない
-(setq auto-save-default nil) ; 初期値はt
+;;(setq auto-save-default nil) ; 初期値はt
 ;; バックアップファイルの作成場所をシステムのTempディレクトリに変更する
-(setq backup-directory-alist
-      '((".*" . ,temporary-file-directory)))
+;;(setq backup-directory-alist
+;;      '((".*" . ,temporary-file-directory)))
 ;; オートセーブファイルの作成場所をシステムのTempディレクトリに変更する
-(setq auto-save-file-name-transforms
-      '((".*" ,temporary-file-directory t)))
+;;(setq auto-save-file-name-transforms
+;;      '((".*" ,temporary-file-directory t)))
+;; バックアップとオートセーブファイルを~/.emacs.d/backups/へ集める
+;;(add-to-list 'backup-directory-alist
+;;             (cons "." "~/.emacs.d/backups/"))
+;;(setq auto-save-file-name-transforms
+;;      '((".*" ,(expand-file-name "~/.emacs.d/backups/") t)))
 ;; オートセーブファイル作成までの秒間隔
 (setq auto-save-timeout 15)
 ;; オートセーブファイル作成までのタイプ間隔
@@ -144,9 +150,9 @@
 ;; emacs-lisp-mode-hook用の関数を定義
 (defun elisp-mode-hooks ()
   "lisp-mode-hooks"
-  (when (rquire 'eldoc nil t)
-    (setq eldoc-idle-delay 0.2)    
-    (setq eldoc-echo-area-use-multiline-p t)    
+  (when (require 'eldoc nil t)
+    (setq eldoc-idle-delay 0.2)
+    (setq eldoc-echo-area-use-multiline-p t)
     (turn-on-eldoc-mode)))
 
 ;; emacs-lisp-modeのフックをセット
