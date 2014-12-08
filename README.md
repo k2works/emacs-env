@@ -184,9 +184,98 @@ $ emacs --debug-init
 + `C-h v 変数名 RET`
 
 ## <a name="3">設定</a>
+### 設定ファイルの管理方法
+#### 効率的な設定ファイルの作り方と管理方法
+フォルダ構成
+```
+.emacs.d/
+├── conf
+├── elisp
+├── elpa
+├── etc
+├── info
+├── init.el
+├── other
+└── public_repos
+```
+設定ファイル
+_init.el_
+
+#### 環境に応じた設定の分岐
+#### 拡張機能の読み込み方
+##### requirとautoloadの違い
++ require
+
+  `(require 機能名 ファイル名 エラーの制御)`
+
++ autoload
+
+  `(autoload 関数名 ファイル名 説明文 対話判定 関数の種類)`
+
+### 本体の設定
+#### 設定を反映する方法
+##### C-x C-eとC-jによる評価
+##### その他の評価
++ `M-x eval-buffer RET`:カレントバッファをすべて評価
++ `M-x eval-rgion RET`:リージョン選択範囲を評価
+
+#### キーバインドの設定
+##### キーマップ
++ グローバルマップ(global-map)
++ カレントバファローカルマップ(current-local-map)
++ 各モードのキーマップ
+
+#### キーバインドの割り当て
+`(define-key キーマップ キーバインド 関数のシンボル)`
+
+#### 環境変数の設定
+##### パスの設定
+```lisp
+(add-to-list 'exec-path "/opt/local/bin")
+(add-to-list 'exec-path "/usr/local/bin")
+```
+##### 文字コードの設定
+`M-x describe-current-coding-system RET`
+
+#### フレームに関する設定
+#### インデントの設定
+#### 表示・装飾に関する設定
+##### フェイス
+##### 表示テーマの設定
+##### フォントの設定
+#### ハイライトの設定
+#### バックアップとオートセーブ
+オートセーブからの復元
+`M-x recover-file RET ~/.emacs.d/init.el RET`
+#### フック
+`(add-hook フック名 実行する関数)`
+##### 代表的なフック一覧
+イベント用フック
+
+| 名前            | 説明         |
+|:---------------|:------------|
+| after-save-hook  | ファイル保存後に実行される  |
+| find-file-hook  | C-x C-f(find-file)でファイルを開いた時に実行される  |
+| emacs-startup-hook  | Emacs起動時に設定ファイルを読み込み終えてから一度だけ実行される  |
+| kill-emacs-hook  | Emacs終了時に実行される  |
+
+各種モード用フック
+
+| 名前            | 説明         |
+|:---------------|:------------|
+| c-mode-hook  | c-modeを起動した後に実行される  |
+| php-mode-hook  | php-modeを起動した後に実行される  |
+| cperl-mode-hook  | cperl-modeを起動した後に実行される  |
+| emacs-lisp-mode-hook  | emacs-lisp-modeを起動した後に実行される  |
+| lispinteraction-mode-hook  | lispinteraction-modeを起動した後に実行される  |
+| js-mode-hook  | js-modeを起動した後に実行される  |
+| css-mode-hook  | css-modeを起動した後に実行される  |
+| nxml-mode-hook  | nxml-modeを起動した後に実行される  |
+
 ## <a name="4">拡張</a>
 
 # 参照
 + [emacs](http://cookbooks.opscode.com/cookbooks/emacs)
 + [emacs24](http://cookbooks.opscode.com/cookbooks/emacs24)
 + [Homebrew で Cocoa Emacs 24.3 を入れた](http://kawachodev.hatenablog.jp/entry/homebrew-cocoa-emacs-24.3)
++ [color-theme](http://savannah.nongnu.org/projects/color-theme)
