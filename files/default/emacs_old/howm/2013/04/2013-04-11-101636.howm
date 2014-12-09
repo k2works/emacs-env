@@ -1,0 +1,46 @@
+= Rubyのデバッグ
+[2013-04-11 10:16]
+[[http://rubist.blog77.fc2.com/blog-entry-114.html]]
+
+デバッグを開始した後、debugger と書いた行の処理が走ったらそこで処理は一旦中断します。
+
+すかさず先ほど script/server -u をしたコンソールに、(rdb:2) などと表示されるので、デバッグコマンドを打ちます。
+
+デバッグの流れとしては、
+
+l=
+で現在の行を確かめて
+
+pp 変数名
+で変数の値を確かめて
+
+e 変数名="honyarara"
+でこの変数の値を変更してみたりした後
+
+n
+でステップ実行したり
+
+s
+でステップインしたり
+
+fin
+でステップアウトしたりして
+
+c
+で次のブレークポイントまで実行させる感じでしょうか。
+
+ruby-debugを使ったRuby・Railsアプリケーションのデバッグ方法
+https://gist.github.com/tkyowa/1378694
+
+http://doruby.kbmj.com/nakahira_on_rails/20090323/ruby_on_rails__debug_
+
+１．gem install ruby-debug
+ ２．デバッグしたいソースコードの場所に
+ 　　『debugger』、viewの場合は『 <% debugger %>　』
+  と記述する。
+  ３．アプリをデバッグモードで起動(ruby script/server -u)して、アプリ実行
+
+  ４．debuggerと書いたところでアプリが勝手に止まる（一時停止）ので
+
+  ５．アプリを動かしているコンソールでデバッグ用コマンドをたたく
+   

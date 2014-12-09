@@ -1,0 +1,4 @@
+= RDSからのsqldump
+[2013-11-09 13:25] 
+[mysqldumpを実行しようとするとCouldn’t execute ‘SET OPTION SQL_QUOTE_SHOW_CREATE=1′が出るときの対処法][http://dev.classmethod.jp/cloud/aws/ec2_mysqldump/]
+acBook-Air:~:-bash$mysqldump -h development.cfxq9mnwsm8s.ap-northeast-1.rds.amazonaws.com -P 3306 -udevdaito -pdevdaito -t hcoss_staging > ~/Desktop/staging.sql

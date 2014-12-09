@@ -1,0 +1,13 @@
+= capデプロイでの公開鍵の登録手順
+[2013-11-01 14:46] 
+    scp -i daito-dev.pm ~/.ssh/id_rsa.pub rails@hcoss.healthy-com.com:~/
+    ssh -i daito-dev.pm rails@hcoss.healthy-com.com
+    cap id_rsa.pub >> ./ssh/authorized_keys
+    rm id_rsa.pub
+    ssh_keygen
+    exit
+    scp -i daito-dev.pem rails@hcoss.healthy-com.com:~/.ssh/id_rsa.pub ~/Desktop/
+    scp ~/Desktop/id_rsa.pub git@dev.k2-works.net:~/
+    ssh git@dev.k2-works.net
+    cap id_rsa.pub >> ./ssh/authorized_keys
+    rm id_rsa.pub    

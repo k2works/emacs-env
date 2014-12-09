@@ -1,0 +1,1723 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>2013-07-04-110719.html</title>
+
+</head>
+
+<body>
+
+<p>= 開発手順書
+[2013-07-04 11:07] </p>
+
+<h1>目的</h1>
+
+<ul>
+<li>AWSでステージング環境を構築してRailsアプリの開発をできるようにする。</li>
+</ul>
+
+<h1>前提条件</h1>
+
+<ul>
+<li>AmazonWebService(AWS)が利用可能である。</li>
+<li>AWSアカウントが作成済みである。</li>
+<li>ドメイン管理をRoute53に移行している。</li>
+<li>ソフトウェアバージョン</li>
+</ul>
+
+<p>| ソフトウェア     | バージョン    | 備考        |
+|:---------------|:-------------|:------------|
+| AmazonLinux    |AMI 2013.03.1 |       |
+| Ruby           |1.9.3p392     |       |
+| Rails          |3.2.13        |       |
+| Apache         |2             |       |
+| Passenger      |4.0.2         |       |
+| MySQL          |5.5.31        |       |</p>
+
+<h1>構成</h1>
+
+<ul>
+<li><p><a href="#section1">インフラストラクチャ</a></p>
+
+<ul>
+<li><p><a href="#section1-1">AWS環境の構築</a></p>
+
+<ul>
+<li><a href="#section1-1-1">ローカル環境の設定</a>    </li>
+<li><a href="#section1-1-2">EC2インスタンス作成</a>    </li>
+<li><a href="#section1-1-3">Elastic IPの割当</a>   </li>
+<li><a href="#section1-1-4">Route53でホスト名の割当</a>    </li>
+<li><a href="#section1-1-5">RDSインスタンスの作成</a></li>
+</ul></li>
+</ul></li>
+<li><p><a href="#section2">ソフトウェア</a></p>
+
+<ul>
+<li><p><a href="#section2-1">OSの設定</a></p></li>
+<li><p><a href="#section2-2">アプリケーションの設定</a></p>
+
+<ul>
+<li><a href="#section2-2-1">ローカル環境の構築</a>
+<ul>
+<li><a href="#section2-2-1-1">Rubyのインストール</a></li>
+<li><a href="#section2-2-1-2">Railsのインストール</a></li>
+<li><a href="#section2-2-1-3">RSpecのインストール</a></li>
+<li><a href="#section2-2-1-4">Capybara-webkitのインストール</a></li>
+<li><a href="#section2-2-1-5">Cucumberのインストール</a></li>
+<li><a href="#section2-2-1-6">FactoryGirlのインストール</a></li>
+<li><a href="#section2-2-1-7">Pryのインストール</a></li>
+<li><a href="#section2-2-1-8">Sportのインストール</a></li>
+<li><a href="#section2-2-1-9">Guardのインストール</a></li>
+<li><a href="#section2-2-1-10">コードカバレッジ分析ツールのインストール</a></li>
+<li><a href="#section2-2-1-11">コード品質検査ツールのインストール</a></li>
+<li><a href="#section2-2-1-12">ドキュメント生成ツールのインストール</a></li>
+</ul></li>
+<li><a href="#section2-2-2">ステージング環境の構築</a>
+<ul>
+<li><a href="#section2-2-2-1">各種パッケージのインストール</a></li>
+<li><a href="#section2-2-2-2">libyamlのインストール</a></li>
+<li><a href="#section2-2-2-3">Ruby 1.9.3のインストール</a></li>
+<li><a href="#section2-2-2-4">Railsアプリケーションサーバのセットアップ</a></li>
+<li><a href="#section2-2-2-5">railsユーザーの設定</a></li>
+<li><a href="#section2-2-2-6">ApacheとPhusion Passengerのセットアップ</a></li>
+<li><a href="#section2-2-2-7">staging環境のデータベースの準備</a></li>
+<li><a href="#section2-2-2-8">Gemfileの追加</a></li>
+<li><a href="#section2-2-2-9">Capistranoの設定フィルを生成</a></li>
+<li><a href="#section2-2-2-10">Capistrano共通のデプロイ設定</a></li>
+<li><a href="#section2-2-2-11">Capistrano Staging環境のデプロイ設定</a></li>
+<li><a href="#section2-2-2-12">メンテナンス画面の設定</a></li>
+<li><a href="#section2-2-2-13">DB設定</a></li>
+<li><a href="#section2-2-2-14">デプロイ前のチェックリスト</a></li>
+<li><a href="#section2-2-2-15">デプロイ手順</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h1>詳細</h1>
+
+<h2><a name="section1">インフラストラクチャ</h2>
+
+<h3><a name="section1-1">AWS環境の構築</h3>
+
+<h4><a name="section1-1-1">ローカル環境の設定</h4>
+
+<h5>コマンドラインツールの設定</h5>
+
+<h6>コマンドラインツールをダウンロードする。</h6>
+
+<p><a href="http://aws.amazon.com/developertools/351">Amazon EC2 API Tools</a></p>
+
+<h6>コマンドラインツールをセットアップする。</h6>
+
+<ol>
+<li><p>Javaのパスを設定する。
+ローカル環境のJavaのパスをコマンドラインツールに教える</p>
+
+<pre><code>$ export JAVA_HOME=/'Javaのパス'
+</code></pre>
+
+<p>Javaのバージョンは1.6かそれ以上</p>
+
+<pre><code>$ java -version
+</code></pre></li>
+<li><p>コマンドラインツールの場所を設定する。 <br />
+ダウンロードしたコマンドラインツールを配置した場所<path-to-tools>を設定する。</p>
+
+<pre><code>$ export EC2_HOME=&lt;path-to-tools&gt;
+</code></pre></li>
+<li><p>アクセス証明書の設定をする。
+以下のページからX.509証明書の作成を依頼してアクセスキーIDとシークレットアクセスキーをダウロードする。
+<a href="https://portal.aws.amazon.com/gp/aws/securityCredentials">アクセス証明書</a>
+<img src="https://dev.k2-works.net/attachments/download/10/I-0001.png" alt="X.509証明書の作成" title="" /></p>
+
+<pre><code>$ export AWS_PRIVATE_KEY=your-aws-access-key
+$ export AWS_CERT=your-aws-secret-key
+</code></pre></li>
+<li><p>起動スクリプト(initaws)を作成する。</p>
+
+<pre><code>#!/bin/bash
+# AWS Common
+export JAVA_HOME="Javaのパス"
+export EC2_KEY_DIR="アクセスキーIDとシークレットアクセスキーを保存しているパス"
+export EC2_PRIVATE_KEY="${EC2_KEY_DIR}/アクセスキーIDファイル名"
+export EC2_CERT="${EC2_KEY_DIR}/シークレットアクセスキーファイル名"
+# EC2
+export EC2_HOME="コマンドラインツールを保存している場所"
+export EC2_URL=https://ec2.ap-northeast-1.amazonaws.com
+</code></pre></li>
+<li><p>コマンドラインツールが動作するか確認する。</p>
+
+<pre><code>$ source initaws
+$ ec2-describe-regions
+</code></pre></li>
+</ol>
+
+<h5>SSHクライアントをインストールする</h5>
+
+<h5>参照</h5>
+
+<p><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SettingUp_CommandLine.html#set_aes_home_linux">コマンドラインツール設定（英語)</a>
+<a href="http://docs.aws.amazon.com/AWSSecurityCredentials/1.0/AboutAWSCredentials.html#AccessKeys">About AWS Security Credentials</a></p>
+
+<h4><a name="section1-1-2">EC2インスタンス作成</h4>
+
+<ol>
+<li><p>AWSマネジメントコンソールからEC2を選択してLaunch Instanceを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/19/I-0002-1.png" alt="Step0" title="" /></p></li>
+<li><p>Amazon Linux AMIを選択するしてContinueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/11/I-0002.png" alt="Step1" title="" /></p></li>
+<li><p>Continueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/12/I-0003.png" alt="Step2" title="" /></p></li>
+<li><p>Continueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/13/I-0004.png" alt="Step3" title="" /></p></li>
+<li><p>Continueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/14/I-0005.png" alt="Step4" title="" /></p></li>
+<li><p>名前を入力してContinueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/15/I-0006.png" alt="Step5" title="" /></p></li>
+<li><p>Key Pairs daito-devを使う。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/16/I-0007.png" alt="Step6" title="" /></p></li>
+<li><p>セキュリテリグループはDaito-Dev-GRを選択する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/17/I-0008.png" alt="Step7" title="" /></p></li>
+<li><p>Lanchを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/18/I-0009.png" alt="Step8" title="" /></p></li>
+<li><p>Closeを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/20/I-0010.png" alt="Step9" title="" /></p></li>
+</ol>
+
+<h4><a name="section1-1-3">Elastic IPの割当</h4>
+
+<ol>
+<li><p>AWSマネジメントコンソールのEC2よりElastic IPsを選択する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/21/I-0011.png" alt="Step" title="" /></p></li>
+<li><p>Allocate New Addressボタンを押して新規Elastic IPアドレスを作成する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/22/I-0012.png" alt="Step" title="" /></p></li>
+<li><p>新規作成したElasticIPアドレスを選択してAssociate Addressを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/23/I-0013.png" alt="Step" title="" /></p></li>
+<li><p>Instanceを開発環境に割り当ててYes,Associateを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/24/I-0014.png" alt="Step" title="" /></p></li>
+</ol>
+
+<h4><a name="section1-1-4">Route53でホスト名の割当</h4>
+
+<ol>
+<li><p>ドメインを取得する
+以下のドメイン情報を利用する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/70/I-0030.png" alt="Step" title="" /></p></li>
+<li><p>Route 53に取得したドメインのホストゾーンを登録する</p>
+
+<p>Route 53を選択する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/71/I-0031.png" alt="Step" title="" /></p>
+
+<p>Create Hoste Zoneを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/72/I-0032.png" alt="Step" title="" /></p>
+
+<p>ドメン名を入力してCreate Hoste Zoneを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/73/I-0033.png" alt="Step" title="" /></p>
+
+<p>新規にドメイン名に対応するHoste Zoneが作成される。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/74/I-0034.png" alt="Step" title="" /></p></li>
+<li><p>各レコードを設定する</p>
+
+<p>対象のドメインを選択してGo to Record Setsを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/75/I-0035.png" alt="Step" title="" /></p>
+
+<p>続いてCreate Record Setを押して新規レコードを作成する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/76/I-0036.png" alt="Step" title="" /></p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/77/I-0037.png" alt="Step" title="" /></p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/78/I-0038.png" alt="Step" title="" /></p></li>
+<li><p>レジストラのネームサーバー情報を更新する</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/79/I-0039.png" alt="Step" title="" /></p>
+
+<p>以下の情報は新規にHosted Zoneを作成すると変わるので作り直しの場合は注意。</p>
+
+<pre><code>ns-1425.awsdns-50.org.
+ns-1868.awsdns-41.co.uk.
+ns-150.awsdns-18.com.
+ns-623.awsdns-13.net.
+</code></pre></li>
+</ol>
+
+<h4><a name="section1-1-5">RDSインスタンスの作成</h4>
+
+<ol>
+<li><p>AWSコンソール画面よりRDSを選択する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/31/I-0015.png" alt="" title="" /></p></li>
+<li><p>InstanceメニューよりLaunch DB Instanceを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/32/I-0016.png" alt="" title="" /></p></li>
+<li><p>MySQLを選択する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/33/I-0017.png" alt="" title="" /></p></li>
+<li><p>必要項目を入力してContinueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/34/I-0018.png" alt="" title="" /></p></li>
+<li><p>Continueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/35/I-0019.png" alt="" title="" /></p></li>
+<li><p>Continueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/36/I-0020.png" alt="" title="" /></p></li>
+<li><p>Launch DB Instanceを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/37/I-0021.png" alt="" title="" /></p></li>
+<li><p>作成したDBインスタンスの日本語設定をするためPrarmeter GroupsからCreate DB Parameter Groupを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/38/I-0022.png" alt="" title="" /></p></li>
+<li><p>Yes,Createを押す。
+<img src="https://dev.k2-works.net/attachments/download/39/I-0023.png" alt="" title="" /></p></li>
+<li><p>Create DB Parameter Groupを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/40/I-0024.png" alt="" title="" /></p></li>
+<li><p>以下の項目をutf8に設定する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/41/I-0025.png" alt="" title="" /></p></li>
+<li><p>最初に作成したDBインスタンスを選択してModiyを実行する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/42/I-0026.png" alt="" title="" /></p></li>
+<li><p>Parameter Groupを作成したParameter Groupに変更してContinueを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/43/I-0027.png" alt="" title="" /></p></li>
+<li><p>Modifiy DB Instanceを押す。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/44/I-0028.png" alt="" title="" /></p></li>
+<li><p>EC2インスタンスメニューに戻りSecurity GroupsよりDaito-Dev-GRを選択してMYSQLを追加する。</p>
+
+<p><img src="https://dev.k2-works.net/attachments/download/45/I-0029.png" alt="" title="" /></p></li>
+</ol>
+
+<h2><a name="section2">ソフトウェア</h2>
+
+<h3><a name="section2-1">OSの設定</h3>
+
+<ol>
+<li><p>yumのアップデート</p>
+
+<pre><code>$ yum check-updates
+$ sudo yum update
+</code></pre></li>
+<li><p>SQLクライアントのインストール及び接続の確認</p>
+
+<pre><code>$ yum search MySQL | grep 'client'
+$ sudo yum install mysql55.x86_64
+$ mysql -h development.cfxq9mnwsm8s.ap-northeast-1.rds.amazonaws.com -P 3306 -u devdaito -p development
+</code></pre></li>
+</ol>
+
+<h4>sshログイン設定</h4>
+
+<p>ローカル</p>
+
+<pre><code>$ ssh-keygen
+$ scp -i daito-dev.pem ~/.ssh/id_rsa.pub ec2-user@54.250.157.204:~
+</code></pre>
+
+<p>リモート</p>
+
+<pre><code>$ cat id_rsa.pub &gt;&gt; .ssh/authorized_keys
+$ rm id_rsa.pub
+</code></pre>
+
+<p>ローカル</p>
+
+<pre><code>$ ssh ec2-user@54.250.157.204
+</code></pre>
+
+<h4>起動スクリプトの追加</h4>
+
+<ol>
+<li><p>.ec2ディレクトリの作成
+リモート</p>
+
+<pre><code>$ mkdir .ec2
+</code></pre></li>
+<li><p>認証ファイルのコピー
+ローカル</p>
+
+<pre><code>$ scp -i daito-dev.pem daito.ai-hide.net/pk-RQD5MX5D2YLOVDC27GMN2IHHGCAO255A.pem ec2-user@54.250.157.204:~/.ec2/
+$ scp -i daito-dev.pem daito.ai-hide.net/cert-RQD5MX5D2YLOVDC27GMN2IHHGCAO255A.pem ec2-user@54.250.157.204:~/.ec2/
+</code></pre></li>
+<li><p>ec2-api-toolsのコピー
+AmazonLinuxの場合既に導入されているので不要</p></li>
+<li>perlのインストール
+AmazonLinuxの場合既に導入されているので不要</li>
+<li>jdkのインストール
+AmazonLinuxの場合既に導入されているので不要</li>
+<li><p>起動スクリプトの作成
+以下のスクリプトファイルをリモートにアップロードする</p>
+
+<pre><code>#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          ec2-instance-provisioning
+# Required-Start:    $network $local_fs
+# Required-Stop:     $apache2
+# Should-Start:      $named
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: ec2 houskeeping
+# Description:       attach elastic id on start
+### END INIT INFO
+
+
+#        
+# ec2-elastic - do some ec2 houskeeping
+#     (attaching/detaching volumes, mounting volumes, etc.)
+#
+
+
+export EC2_KEY_DIR=/root/.ec2
+export EC2_PRIVATE_KEY=${EC2_KEY_DIR}/pk-RQD5MX5D2YLOVDC27GMN2IHHGCAO255A.pem
+export EC2_CERT=${EC2_KEY_DIR}/cert-RQD5MX5D2YLOVDC27GMN2IHHGCAO255A.pem
+export EC2_URL="https://ec2.ap-northeast-1.amazonaws.com"
+MAX_TRIES=60
+
+
+prog=$(basename $0)
+logger="logger -t $prog"
+curl="curl --retry 3 --silent --show-error --fail"
+# this URL gives us information about the current instance
+instance_data_url=http://169.254.169.254/latest
+region="ap-northeast-1"
+elastic_ip=54.250.157.204
+
+
+#Wait until networking is up on the EC2 instance.
+perl -MIO::Socket::INET -e '
+ until(new IO::Socket::INET("169.254.169.254:80"))
+ {print"Waiting for network...\n";sleep 1}
+' | $logger
+
+
+# start/stop functions for OS
+
+
+start() {
+    ctr=0
+    # because the instance might change we have to get the id dynamically
+    instance_id=$($curl $instance_data_url/meta-data/instance-id)
+    /bin/echo "Associating Elastic IP."
+    ec2-associate-address $elastic_ip -i $instance_id  --region=$region
+}
+
+
+stop() {
+    /bin/echo "Diassociating Elastic IP."
+    ec2-disassociate-address $elastic_ip --region=$region
+
+
+}
+
+
+case "$1" in
+    start)
+        start
+        ;;
+
+
+<pre><code>stop)
+    stop
+    ;;
+restart)
+    stop
+    sleep 5
+    start
+    ;;
+*)
+    echo "Using: $SELF {start|stop|restart}"
+    exit 1
+    ;;
+
+
+esac
+</code></pre>
+
+exit 0
+</code></pre>
+
+<p>ローカル</p>
+
+<pre><code>$ scp -i daito-dev.pem daito.ai-hide.net/ec2 ec2-user@54.250.157.204:~/.ec2/
+</code></pre></li>
+<li><p>起動スクリプトの設定
+リモート</p>
+
+<pre><code>$ sudo su
+# mdkir .ec2
+# cp -r /home/ec2-user/.ec2/* .ec2/
+# cp .ec2/ec2 /etc/init.d/
+# chkconfig --add ec2
+# chkconfig ec2 on
+</code></pre>
+
+<p>インスタンス再起動後にElasticIPが割り付けられていればOK</p></li>
+</ol>
+
+<h3><a name="section2-2">アプリケーションの設定</h3>
+
+<h4><a name="section2-2-1">ローカル環境の構築</h4>
+
+<h5><a name="section2-2-1-1">Rubyのインストール</h5>
+
+<ol>
+<li><p>RVMのインストール
+RVMのインストールに関しては<a href="https://rvm.io/rvm/install">Installing RVM</a>を参照。</p></li>
+<li><p>rubyのインストール</p>
+
+<pre><code>$ rvm install 1.9.3-p392
+$ rvm gemset create hcoss
+$ rvm use --default 1.9.3-p392@hcoss
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-2">Railsのインストール</h5>
+
+<ol>
+<li><p>railsのインストール</p>
+
+<pre><code>$ gem install rails --version"=3.2.13" bundler
+</code></pre></li>
+<li><p>開発プロジェクトで指定されたGemsetのバージョンを使えるようにする。</p>
+
+<pre><code>$ mkdir daito.ai-hide.net
+$ cd daito.ai-hide.net
+$ mkdir hcoss
+$ cd hcoss
+$ echo ruby-1.9.3-p392@hcoss &gt; .rvmrc
+$ cd ..
+$ cd hcoss
+</code></pre>
+
+<p>上記の設定後、初めてアクセスすると以下のようにtrustするかを訊かれるので、YESと答える。
+もし処理が進まない場合は中断してhcossディレクトリ内で下記のコマンドを実行</p>
+
+<pre><code>$ mv .rvmrc .ruby-version
+</code></pre>
+
+<p>rubyのバージョンとGemsetを確認する。</p>
+
+<pre><code>$ ruby -v
+$ gem env gemdir
+</code></pre></li>
+<li><p>Railsプロジェクトを作成する。</p>
+
+<pre><code>$ cd ~/projects/daito.ai-hide.net/hcoss/
+$ rails new .
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-3">RSpecのインストール</h5>
+
+<ol>
+<li><p>RSpecをインストールするためGemfileを編集する。</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+end
+</code></pre></li>
+<li><p>bundlerによりRSpecをインストールする。</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>RSpecをこのプロジェクトで使うためのファイルを生成する。</p>
+
+<pre><code>$ rails g rspec:install
+</code></pre></li>
+<li><p>.rpecファイルの作成</p>
+
+<pre><code>$ echo '--color --drb -f d' &gt; .rspec
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-4">Capybara-webkitのインストール</h5>
+
+<ol>
+<li><p>capybara-webkitと依存関係にあるQtをインストールする。</p>
+
+<pre><code>$ sudo apt-get install libqt4-dev libqtwebkit-dev
+</code></pre></li>
+<li><p>Gemfileを編集する。</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'         
+end
+
+
+group :test do
+ gem 'capybara-webkit'
+end
+</code></pre></li>
+<li><p>bundlerでインストールする。</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>spec/spec_helper.rbを編集する。
+以下の設定cnfig.order = "random"以下に加える</p>
+
+<pre><code>config.before(:suite) do
+ DatabaseCleaner.strategy = :truncation
+ DatabaseCleaner.clean_with(:truncation)
+end
+
+
+config.before(:each) do
+ DatabaseCleaner.start
+end
+config.after(:each) do
+ DatabaseCleaner.clean
+end
+</code></pre></li>
+<li><p>capybara-webkitのための設定を加える。</p>
+
+<pre><code>config.before(:suite) do
+ DatabaseCleaner.strategy = :truncation
+ DatabaseCleaner.clean_with(:truncation)
+end
+
+
+config.before(:each) do
+ DatabaseCleaner.start
+end
+config.after(:each) do
+ DatabaseCleaner.clean
+end
+Capybara.javascript_driver = :webkit
+</code></pre></li>
+<li><p>RSpecの実行
+以下のコマンドはプロジェクト内でアプリを生成していないと動作しない。</p>
+
+<pre><code>$ rake db:setup
+
+
+$ rake spec
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-5">Cucumberのインストール</h5>
+
+<ol>
+<li><p>Gemfileを編集する</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'
+ # 受け入れテスト
+ gem 'cucumber-rails', '~&gt;1.3.1', :require =&gt; false
+end
+</code></pre></li>
+<li><p>bundlerでインストールする</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>Cucumberをこのプロジェクトで使うためのファイルを生成する。</p>
+
+<pre><code>$ rails g cucumber:install
+</code></pre></li>
+<li><p>Cucumberを実行する
+以下のコマンドはプロジェクト内でアプリを生成していないと動作しない。</p>
+
+<pre><code>$ rake cucumber
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-6">FactoryGirlのインストール</h5>
+
+<ol>
+<li><p>Gemfileを編集する</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'
+ # 受け入れテスト
+ gem 'cucumber-rails', '~&gt;1.3.1', :require =&gt; false
+ # fixtureの代わり
+ gem "factory_girl_rails"
+end
+</code></pre></li>
+<li><p>bundlerでインストールする</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>application.rbの設定
+config/application.rb内のclass Application &lt; Rails::Application内に以下の内容を追加。</p>
+
+<pre><code># generatorの設定
+config.generators do |g|
+ g.test_framework  :rspec, :fixture =&gt; true
+ g.fixture_replacement :factory_girl, :dir =&gt; "spec/factories"
+ g.view_specs false
+ g.controller_specs false
+ g.helper_specs false
+ g.routing_specs false
+ g.request_specs false
+end
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-7">Pryのインストール</h5>
+
+<ol>
+<li><p>Gemfileを編集する</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'
+ # 受け入れテスト
+ gem 'cucumber-rails', '~&gt;1.3.1', :require =&gt; false
+ # fixtureの代わり
+ gem "factory_girl_rails"
+ # Railsコンソールの多機能版
+ gem 'pry-rails'
+ # pryの入力に色付け
+ gem 'pry-coolline'
+ # コードに"binding.remote_pry(rspec内ではbinding.pry_remote)" =&gt; pry-remoteでpryに入れます。
+ gem 'pry-remote'
+ gem "pry-debugger"
+ gem "pry-doc"
+ gem 'pry-stack_explorer'
+ # PryでのSQLの結果を綺麗に表示
+ gem 'hirb'
+ gem 'hirb-unicode'
+ # pryの色付けをしてくれる
+ gem 'awesome_print'
+end
+</code></pre></li>
+<li><p>bundlerでインストールする</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>development.rbの設定
+config/environments/development.rbの中のHcoss::Application.configureに以下を追加。</p>
+
+<pre><code>silence_warnings do
+ begin
+   require 'pry'
+   IRB = Pry
+ rescue LoadError
+ end
+end
+</code></pre></li>
+<li><p>~/.pryrcへ追記</p>
+
+<pre><code># -*- coding: utf-8 -*-
+# awesome_printの色付けの設定
+require "awesome_print"
+AwesomePrint.pry!
+
+
+# pry-debuggerのショートカット
+Pry.commands.alias_command 'c', 'continue'
+Pry.commands.alias_command 's', 'step'
+Pry.commands.alias_command 'n', 'next'
+Pry.commands.alias_command 'f', 'finish'
+
+
+# hirbの設定
+begin
+ require 'hirb'
+rescue LoadError
+# Missing goodies, bummer
+end
+
+
+if defined? Hirb
+  # Slightly dirty hack to fully support in-session Hirb.disable/enable toggling
+  Hirb::View.instance_eval do
+    def enable_output_method
+      @output_method = true
+      @old_print = Pry.config.print
+      Pry.config.print = proc do |output, value|
+        Hirb::View.view_or_page_output(value) || @old_print.call(output, value)
+      end
+    end
+
+
+<pre><code>def disable_output_method
+  Pry.config.print = @old_print
+  @output_method = nil
+end
+</code></pre>
+
+  end
+
+
+  Hirb.enable
+end
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-8">Sportのインストール</h5>
+
+<ol>
+<li><p>Gemfileを編集する</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'
+ # 受け入れテスト
+ gem 'cucumber-rails', '~&gt;1.3.1', :require =&gt; false
+ # fixtureの代わり
+ gem "factory_girl_rails"
+ # Railsコンソールの多機能版
+ gem 'pry-rails'
+ # pryの入力に色付け
+ gem 'pry-coolline'
+ # コードに"binding.remote_pry(rspec内ではbinding.pry_remote)" =&gt; pry-remoteでpryに入れます。
+ gem 'pry-remote'
+ gem "pry-debugger"
+ gem "pry-doc"
+ gem 'pry-stack_explorer'
+ # PryでのSQLの結果を綺麗に表示
+ gem 'hirb'
+ gem 'hirb-unicode'
+ # pryの色付けをしてくれる
+ gem 'awesome_print'
+ # 設定をロードしたサーバーによってテストを高速化
+ gem 'spork'
+end
+</code></pre></li>
+<li><p>bundlerでインストールする</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>spec/spec_helperの編集
+一通りSpork.prefork do・・・endに入れる</p>
+
+<pre><code># -*- coding: utf-8 -*-        
+# This file is copied to spec/ when you run 'rails generate rspec:install'
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../config/environment", __FILE__)
+require 'rspec/rails'
+require 'rspec/autorun'
+require 'rubygems'
+require 'spork'
+
+
+#uncomment the following line to use spork with the debugger
+#require 'spork/ext/ruby-debug'
+
+
+# Requires supporting ruby files with custom matchers and macros, etc,
+# in spec/support/ and its subdirectories.
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+
+
+Spork.prefork do
+  # Loading more in this block will cause your tests to run faster. However,
+  # if you change any configuration or code from libraries loaded here, you'll
+  # need to restart spork for it take effect.
+
+
+  RSpec.configure do |config|
+    # ## Mock Framework
+    #
+    # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
+    #
+    # config.mock_with :mocha
+    # config.mock_with :flexmock
+    # config.mock_with :rr
+
+
+<pre><code># Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+config.fixture_path = "#{::Rails.root}/spec/fixtures"
+
+
+# If you're not using ActiveRecord, or you'd prefer not to run each of your
+# examples within a transaction, remove the following line or assign false
+# instead of true.
+config.use_transactional_fixtures = true
+
+
+# If true, the base class of anonymous controllers will be inferred
+# automatically. This will be the default behavior in future versions of
+# rspec-rails.
+config.infer_base_class_for_anonymous_controllers = false
+
+
+# Run specs in random order to surface order dependencies. If you find an
+# order dependency and want to debug it, you can fix the order by providing
+# the seed, which is printed after each run.
+#     --seed 1234
+config.order = "random"
+
+
+config.before(:suite) do
+  DatabaseCleaner.strategy = :truncation
+  DatabaseCleaner.clean_with(:truncation)
+end
+
+
+config.before(:each) do
+  DatabaseCleaner.start
+end
+config.after(:each) do
+  DatabaseCleaner.clean
+end
+Capybara.javascript_driver = :webkit
+</code></pre>
+
+  end
+end
+
+
+Spork.each_run do
+  # This code will be run each time you run your specs.
+end
+</code></pre></li>
+<li><p>sporkの初期設定。</p>
+
+<pre><code>$ bundle exec spork --bootstrap
+</code></pre></li>
+<li><p>sporkのテスト。(起動が確認できたらCtrl + Cで停止させてください)</p>
+
+<pre><code>$ bundle exec spork
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-9">Guardのインストール</h5>
+
+<ol>
+<li><p>Gemfileを編集する</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'
+ # 受け入れテスト
+ gem 'cucumber-rails', '~&gt;1.3.1', :require =&gt; false
+ # fixtureの代わり
+ gem "factory_girl_rails"
+ # Railsコンソールの多機能版
+ gem 'pry-rails'
+ # pryの入力に色付け
+ gem 'pry-coolline'
+ # コードに"binding.remote_pry(rspec内ではbinding.pry_remote)" =&gt; pry-remoteでpryに入れます。
+ gem 'pry-remote'
+ gem "pry-debugger"
+ gem "pry-doc"
+ gem 'pry-stack_explorer'
+ # PryでのSQLの結果を綺麗に表示
+ gem 'hirb'
+ gem 'hirb-unicode'
+ # pryの色付けをしてくれる
+ gem 'awesome_print'
+ # 設定をロードしたサーバーによってテストを高速化
+ gem 'spork'
+ # ファイルの変更を監視してPowサーバを再起動
+ gem 'guard-pow'
+ # ファイルの変更を監視してテストを自動化
+ gem 'guard-rspec'
+ # 設定ファイルの変更を監視してテストサーバーを再起動
+ gem 'guard-spork'
+ # Gemfileを監視して、変更があったら自動でbundle installを実行
+ gem 'guard-bundler'
+end
+
+
+group :test do
+ gem 'capybara-webkit'
+end
+</code></pre></li>
+<li><p>bundlerでインストールする</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>Guardfileの作成。</p>
+
+<pre><code>$ bundle exec guard init
+</code></pre></li>
+<li><p>Guardfileに以下の項目を追加</p>
+
+<pre><code>guard 'rspec' do
+ # rakeファイルの更新監視
+ watch(%r{^lib/(.+)\.rake$})     { |m| "spec/lib/#{m[1]}_rake_spec.rb" }
+end
+
+
+# 全体テストをしないようにする(全体テストは、guardが動いてる所でEnterすると実行)
+# guard 'rspec' doを以下に書換え
+guard 'rspec', :version =&gt; 2, :cli =&gt; "--drb", :all_after_pass =&gt; false, :all_on_start =&gt; false do
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-10">コードカバレッジ分析ツールのインストール</h5>
+
+<ol>
+<li><p>Gemfileを編集する</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'
+ # 受け入れテスト
+ gem 'cucumber-rails', '~&gt;1.3.1', :require =&gt; false
+ # fixtureの代わり
+ gem "factory_girl_rails"
+ # Railsコンソールの多機能版
+ gem 'pry-rails'
+ # pryの入力に色付け
+ gem 'pry-coolline'
+ # コードに"binding.remote_pry(rspec内ではbinding.pry_remote)" =&gt; pry-remoteでpryに入れます。
+ gem 'pry-remote'
+ gem "pry-debugger"
+ gem "pry-doc"
+ gem 'pry-stack_explorer'
+ # PryでのSQLの結果を綺麗に表示
+ gem 'hirb'
+ gem 'hirb-unicode'
+ # pryの色付けをしてくれる
+ gem 'awesome_print'
+ # 設定をロードしたサーバーによってテストを高速化
+ gem 'spork'
+ # ファイルの変更を監視してPowサーバを再起動
+ gem 'guard-pow'
+ # ファイルの変更を監視してテストを自動化
+ gem 'guard-rspec'
+ # 設定ファイルの変更を監視してテストサーバーを再起動
+ gem 'guard-spork'
+ # Gemfileを監視して、変更があったら自動でbundle installを実行
+ gem 'guard-bundler'
+end
+
+
+group :test do
+ gem 'capybara-webkit'
+ #コードカバレッジ分析ツール
+ gem 'simplecov', :require =&gt; false
+ gem 'simplecov-rcov', :require =&gt; false
+end
+</code></pre></li>
+<li><p>bundlerでインストールする</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>spec/spec_helper.rbを編集する。</p>
+
+<pre><code># -*- coding: utf-8 -*-        
+# This file is copied to spec/ when you run 'rails generate rspec:install'
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../config/environment", __FILE__)
+require 'rspec/rails'
+require 'rspec/autorun'
+require 'rubygems'
+require 'spork'
+require 'simplecov'
+require 'simplecov-rcov'
+SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+SimpleCov.start 'rails'        
+
+
+#uncomment the following line to use spork with the debugger
+#require 'spork/ext/ruby-debug'
+
+
+# Requires supporting ruby files with custom matchers and macros, etc,
+# in spec/support/ and its subdirectories.
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+
+
+Spork.prefork do
+  # Loading more in this block will cause your tests to run faster. However,
+  # if you change any configuration or code from libraries loaded here, you'll
+  # need to restart spork for it take effect.
+
+
+  RSpec.configure do |config|
+    # ## Mock Framework
+    #
+    # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
+    #
+    # config.mock_with :mocha
+    # config.mock_with :flexmock
+    # config.mock_with :rr
+
+
+<pre><code># Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+config.fixture_path = "#{::Rails.root}/spec/fixtures"
+
+
+# If you're not using ActiveRecord, or you'd prefer not to run each of your
+# examples within a transaction, remove the following line or assign false
+# instead of true.
+config.use_transactional_fixtures = true
+
+
+# If true, the base class of anonymous controllers will be inferred
+# automatically. This will be the default behavior in future versions of
+# rspec-rails.
+config.infer_base_class_for_anonymous_controllers = false
+
+
+# Run specs in random order to surface order dependencies. If you find an
+# order dependency and want to debug it, you can fix the order by providing
+# the seed, which is printed after each run.
+#     --seed 1234
+config.order = "random"
+
+
+config.before(:suite) do
+  DatabaseCleaner.strategy = :truncation
+  DatabaseCleaner.clean_with(:truncation)
+end
+
+
+config.before(:each) do
+  DatabaseCleaner.start
+end
+config.after(:each) do
+  DatabaseCleaner.clean
+end
+Capybara.javascript_driver = :webkit
+</code></pre>
+
+  end
+end
+
+
+Spork.each_run do
+  # This code will be run each time you run your specs.
+end
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-11">コード品質検査ツールのインストール</h5>
+
+<ol>
+<li><p>Gemfileを編集する</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'
+ # 受け入れテスト
+ gem 'cucumber-rails', '~&gt;1.3.1', :require =&gt; false
+ # fixtureの代わり
+ gem "factory_girl_rails"
+ # Railsコンソールの多機能版
+ gem 'pry-rails'
+ # pryの入力に色付け
+ gem 'pry-coolline'
+ # コードに"binding.remote_pry(rspec内ではbinding.pry_remote)" =&gt; pry-remoteでpryに入れます。
+ gem 'pry-remote'
+ gem "pry-debugger"
+ gem "pry-doc"
+ gem 'pry-stack_explorer'
+ # PryでのSQLの結果を綺麗に表示
+ gem 'hirb'
+ gem 'hirb-unicode'
+ # pryの色付けをしてくれる
+ gem 'awesome_print'
+ # 設定をロードしたサーバーによってテストを高速化
+ gem 'spork'
+ # ファイルの変更を監視してPowサーバを再起動
+ gem 'guard-pow'
+ # ファイルの変更を監視してテストを自動化
+ gem 'guard-rspec'
+ # 設定ファイルの変更を監視してテストサーバーを再起動
+ gem 'guard-spork'
+ # Gemfileを監視して、変更があったら自動でbundle installを実行
+ gem 'guard-bundler'
+ # コード品質検査ツール         
+ gem 'rails_best_practices', :require =&gt; false
+end
+
+
+group :test do
+ gem 'capybara-webkit'
+ #コードカバレッジ分析ツール
+ gem 'simplecov', :require =&gt; false
+ gem 'simplecov-rcov', :require =&gt; false
+end
+</code></pre></li>
+<li><p>bundlerでインストールする</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>検査の実施</p>
+
+<pre><code>$ rails_best_practices
+</code></pre></li>
+</ol>
+
+<h5><a name="section2-2-1-12">ドキュメント生成ツールのインストール</h5>
+
+<ol>
+<li><p>Gemfileを編集する</p>
+
+<pre><code>group :test, :development do
+ # 単体テスト
+ gem 'rspec-rails', '~&gt;2.0'
+ # テスト環境のテーブルをきれいにする
+ gem 'database_cleaner'
+ # 受け入れテスト
+ gem 'cucumber-rails', '~&gt;1.3.1', :require =&gt; false
+ # fixtureの代わり
+ gem "factory_girl_rails"
+ # Railsコンソールの多機能版
+ gem 'pry-rails'
+ # pryの入力に色付け
+ gem 'pry-coolline'
+ # コードに"binding.remote_pry(rspec内ではbinding.pry_remote)" =&gt; pry-remoteでpryに入れます。
+ gem 'pry-remote'
+ gem "pry-debugger"
+ gem "pry-doc"
+ gem 'pry-stack_explorer'
+ # PryでのSQLの結果を綺麗に表示
+ gem 'hirb'
+ gem 'hirb-unicode'
+ # pryの色付けをしてくれる
+ gem 'awesome_print'
+ # 設定をロードしたサーバーによってテストを高速化
+ gem 'spork'
+ # ファイルの変更を監視してPowサーバを再起動
+ gem 'guard-pow'
+ # ファイルの変更を監視してテストを自動化
+ gem 'guard-rspec'
+ # 設定ファイルの変更を監視してテストサーバーを再起動
+ gem 'guard-spork'
+ # Gemfileを監視して、変更があったら自動でbundle installを実行
+ gem 'guard-bundler'
+ # コード品質検査ツール         
+ gem 'rails_best_practices', :require =&gt; false
+ # ドキュメント生成ツール
+ gem 'yard', :require =&gt; false
+end
+
+
+group :test do
+ gem 'capybara-webkit'
+ #コードカバレッジ分析ツール
+ gem 'simplecov', :require =&gt; false
+ gem 'simplecov-rcov', :require =&gt; false
+end
+</code></pre></li>
+<li><p>bundlerでインストールする</p>
+
+<pre><code>$ bundle install
+</code></pre></li>
+<li><p>ドキュメント生成の実施</p>
+
+<pre><code>$ yard doc
+</code></pre></li>
+</ol>
+
+<h4><a name="section2-2-2">ステージング環境の構築</h4>
+
+<h6><a name="section2-2-2-1">各種パッケージのインストール</h6>
+
+<pre><code>$ yum update
+
+$ yum -y install gcc gcc-c++ autoconf git
+
+$ yum -y install openssl-devel zlib-devel readline-devel curl-devel gettext-devel
+
+$ yum -y install httpd-devel sqlite-devel
+
+$ yum install libxml2-devel
+
+$ yum install libxslt-devel
+</code></pre>
+
+<h6><a name="section2-2-2-2">libyamlのインストール</h6>
+
+<pre><code>$ cd /usr/local/src
+
+$ wget http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+
+$ tar xzf yaml-0.1.4.tar.gz
+
+$ cd yaml-0.1.4
+
+$ ./configure
+
+$ make &amp;&amp; make install
+</code></pre>
+
+<p>ここまでrootユーザー</p>
+
+<h6><a name="section2-2-2-3">Ruby 1.9.3のインストール</h6>
+
+<p>ここからsudoユーザー</p>
+
+<pre><code>% mkdir ~/src
+
+% cd ~/src
+
+% wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p392.tar.gz
+
+% tar xzf ruby-1.9.3-p392.tar.gz
+
+% cd ruby-1.9.3-p392
+
+% ./configure
+
+% make
+
+% sudo make install
+</code></pre>
+
+<h6><a name="section2-2-2-4">Railsアプリケーションサーバのセットアップ</h6>
+
+<h6><a name="section2-2-2-5">railsユーザーの設定</h6>
+
+<ol>
+<li><p>railsユーザーの作成</p>
+
+<pre><code>$ sudo useradd -m -d /var/rails rails
+
+
+$ sudo passwd rails
+
+
+$ sudo chmod 750 /var/rails
+</code></pre></li>
+<li><p>Apache実行ユーザーをグループに追加</p>
+
+<pre><code>$ sudo gpasswd -a apache rails
+</code></pre></li>
+<li><p>Bundlerのインストール</p>
+
+<pre><code>$ sudo gem install bundler --no-ri --no-rdoc
+</code></pre>
+
+<p>gemが無いとエラーが出た場合は sudo /usr/local/bin/gem install bundler --no-ri --no-rdoc</p>
+
+<pre><code>$ sudo su
+
+
+$ cd ~
+
+
+$ vi .bash_profile
+</code></pre>
+
+<p>PATH=$PATH:$HOME/bin:/usr/local/binを追加</p>
+
+<pre><code>$ souce .bash_profile
+</code></pre></li>
+</ol>
+
+<h6><a name="section2-2-2-6">ApacheとPhusion Passengerのセットアップ</h6>
+
+<ol>
+<li><p>Phusion Passengerのインストール</p>
+
+<pre><code>$ sudo gem install passenger --no-ri --no-rdoc
+
+
+$ sudo passenger-install-apache2-module
+</code></pre></li>
+<li><p>Apacheの準備</p>
+
+<pre><code>% sudo su
+
+
+$ cd /etc/httpd
+
+
+$ echo "Include /etc/httpd/sites-enabled/" &gt;&gt; conf/httpd.conf
+
+
+$ mkdir sites-available
+
+
+$ mkdir sites-enabled
+
+
+$ rm conf.d/welcome.conf
+</code></pre>
+
+<p>エディタで /etc/httpd/conf/httpd.conf を開き</p>
+
+<pre><code>#ServerName www.example.com:80
+</code></pre>
+
+<p>という箇所のコメント記号（#）を取り除いてください。</p>
+
+<p>また、</p>
+
+<pre><code>#NameVirtualHost *:80
+</code></pre>
+
+<p>のコメント記号（#）を取り除いてください。</p></li>
+<li><p>Phusion PassengerをApacheに組み込む
+新規ファイル /etc/httpd/conf.d/passenger.conf に次の内容を書き込みます。</p>
+
+<pre><code>LoadModule passenger_module /usr/local/lib/ruby/gems/1.9.1/gems/passenger-4.0.5/libout/apache2/mod_passenger.so
+PassengerRoot /usr/local/lib/ruby/gems/1.9.1/gems/passenger-4.0.5
+PassengerDefaultRuby /usr/local/bin/ruby
+</code></pre></li>
+<li><p>新規ファイル /etc/httpd/sites-available/default に次の内容を書き込みます。</p>
+
+<pre><code>&lt;VirtualHost *:80&gt;
+DocumentRoot /var/www/html
+    &lt;Directory /var/www/html&gt;
+        AllowOverride all
+        Options None
+        Order Deny,Allow
+        Deny from All
+    &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+
+
+$ ln -s /etc/httpd/sites-available/default /etc/httpd/sites-enabled/000-default
+</code></pre></li>
+<li><p>新規ファイル /etc/httpd/sites-available/hcoss に次の内容を書き込みます。</p>
+
+<pre><code>&lt;VirtualHost *:80&gt;
+    ServerName hcoss.daito.ai-hide.net
+    ServerAlias *.hcoss.daito.ai-hide.net
+    DocumentRoot /var/rails/hcoss/current/public
+    RackEnv production
+    PassengerEnabled on
+    RemoveHandler .cgi .php            
+    &lt;Directory /var/rails/hcoss/current/public&gt;
+        AllowOverride all
+        Options -MultiViews
+    &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+
+
+$ ln -s /etc/httpd/sites-available/hcoss /etc/httpd/sites-enabled/001-hcoss
+</code></pre></li>
+<li><p>Apacheの起動</p>
+
+<pre><code>$ service httpd start
+</code></pre></li>
+</ol>
+
+<h6><a name="section2-2-2-7">staging環境のデータベースの準備</h6>
+
+<ol>
+<li><p>日本語対応</p>
+
+<pre><code>$ mysql -h development.cfxq9mnwsm8s.ap-northeast-1.rds.amazonaws.com -P 3306 -u devdaito -p development
+Enter password: devdaito1017
+mysql&gt; show variables like '%character%';
+mysql&gt; alter database development default character set utf8;
+mysql&gt; show variables like '%character%';
+</code></pre></li>
+<li><p>ステージングDB作成</p>
+
+<pre><code>mysql&gt; CREATE DATABASE hcoss_staging DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+mysql&gt; GRANT ALL ON hcoss_staging.* TO 'hcoss'@'localhost';
+mysql&gt; SET PASSWORD FOR 'hcoss'@'localhost' = PASSWORD('55Hmh0;ks');
+mysql&gt; alter database hcoss_staging default character set utf8;
+mysql&gt; show variables like '%character%';
+exit
+</code></pre></li>
+</ol>
+
+<h6><a name="section2-2-2-8">Gemfileの追加</h6>
+
+<p>Gemfileを追加して、bundle installを実行。</p>
+
+<pre><code>  # Deploy with Capistrano
+  group :deployment do
+    gem 'capistrano'
+    gem 'capistrano-ext'
+    gem 'capistrano_colors'
+    gem 'rvm-capistrano'
+  end
+
+  # メンテナンスモード画面の表示
+  gem 'turnout'
+</code></pre>
+
+<h6><a name="section2-2-2-9">Capistranoの設定フィルを生成</h6>
+
+<pre><code>$ capify .
+</code></pre>
+
+<p>続いて、staging環境/production環境専用のCapistrano設定ファイルを作成。</p>
+
+<pre><code>$ mkdir config/deploy
+$ touch config/deploy/staging.rb
+$ touch config/deploy/production.rb
+</code></pre>
+
+<h6><a name="section2-2-2-10">Capistrano共通のデプロイ設定</h6>
+
+<p>config/deploy.rb</p>
+
+<pre><code># -*- coding: utf-8 -*-
+set :default_stage, "production"
+
+# 複数環境にデプロイできるようにする
+require "capistrano/ext/multistage"
+
+# capistranoの出力をカラーに
+require 'capistrano_colors'
+
+# cap deploy時に自動で bundle installを実行
+require "bundler/capistrano"
+
+# RVM
+require "rvm/capistrano"
+#### RVMで利用するRubyのバージョンを設定(1.9.3を変更) ####
+set :rvm_ruby_string, '1.9.3'
+set :rvm_type, :user
+
+# gitリポジトリの設定
+#### gitリポジトリをセット ####
+set :local_repository,  "git@dev.k2-works.net:hcoss.git"
+set :repository,  "/var/git/hcoss.git"
+set :scm, :git
+set :branch, "master"
+set :deploy_via, :remote_cache
+
+# SSH
+set :use_sudo, true
+set :default_run_options, :pty =&gt; true
+ssh_options[:forward_agent] = true
+
+set :normalize_asset_timestamps, false
+# 過去のデプロイしたフォルダを履歴として保持する数
+set :keep_releases, 5
+
+# assets:precompile
+namespace :assets do
+  task :precompile, :roles =&gt; :web do
+    run "cd #{current_path} &amp;&amp; RAILS_ENV=#{rails_env} bundle exec rake assets:precompile"
+  end
+end
+
+# メンテナンスモード
+namespace :maintenance do
+  desc "Maintenance start"
+  task :on, :roles =&gt; :web do
+    on_rollback { run "rm #{current_path}/tmp/maintenance.yml" }
+    page = File.read("config/maintenance.yml")
+    put page, "#{current_path}/tmp/maintenance.yml", :mode =&gt; 0644
+  end
+
+desc "Maintenance stop"
+task :off, :roles =&gt; :web do
+run "rm #{release_path}/tmp/maintenance.yml"
+  end
+end
+
+namespace :deploy do
+  # Passengerの実行ユーザー/Groupをセット
+  task :set_file_process_owner do
+    sudo "chown -R #{user}:#{user_group} #{deploy_to}"
+  end
+
+  #### sitemap_generatorを使ってない場合は削除 ####
+#  desc "sitemapの更新"
+#  task :refresh_sitemaps do
+#    run "cd #{latest_release} &amp;&amp; RAILS_ENV=#{rails_env} bundle exec rake sitemap:refresh"
+#  end
+
+  # 本番サーバでPassenger以外を使っている場合は適宜変更して下さい。
+  desc "Passenger用に起動/停止タスクを変更"
+  task :restart, :roles =&gt; :web do
+    run "touch #{current_path}/tmp/restart.txt"
+  end
+
+  # page_cacheを使用していない場合は不要
+  desc "キャッシュhtmlの削除(deploy中に不完全なhtmlを生成しないための対策)"
+  task :remove_caches, :roles =&gt; :web do
+    run "rm -rf #{current_path}/public/index.html"
+  end
+
+  #### Wheneverを使っていない場合は削除
+#  desc "wheneverのアップデート"
+#  task :whenever_update do
+#    run "cd #{latest_release} &amp;&amp; RAILS_ENV=#{rails_env} bundle exec whenever --update-crontab #{application} -f config/schedule_#{rails_env}.rb"
+#  end
+end
+before :deploy, "deploy:set_file_process_owner"
+</code></pre>
+
+<h6><a name="section2-2-2-11">Capistrano Staging環境のデプロイ設定</h6>
+
+<p>config/deploy/staging.rb</p>
+
+<pre><code># -*- coding: utf-8 -*-
+#### TEST_APP_STAGINGにアプリ名を登録 ####
+set :application, "HCOSS"
+
+# RVM
+#### rvmのパス 環境に合わせて変更 ####
+set :rvm_path, '~/.rvm'
+set :rvm_bin_path, "#{rvm_path}/bin"
+set :rvm_lib_path, "#{rvm_path}/lib"
+
+# デプロイ先のフォルダ設定
+#### デプロイ先のフォルダを設定 ####
+set :deploy_to, "/var/rails/hcoss"
+#### デプロイする環境名をセット ####
+set :rails_env, "staging"
+
+# デプロイ先のサーバの設定
+server "dev.k2-works.net", :app, :web, :db, :primary =&gt; true
+
+# Bundle
+set :bundle_flags, ""
+
+# SSHユーザの設定
+#### USER_NAME, USER_GROUP, PASSWORD, KEYのパス, パスフレーズ、SSHのポート
+set :user, "rails"
+set :user_group, "rails"
+set :password, "k2wRAL0813"
+ssh_options[:keys] = %w(~/.ssh/id_rsa)
+ssh_options[:passphrase] = ""
+ssh_options[:port] = "22"
+
+namespace :deploy do
+  #### Powを使っていない場合は削除(環境に合わせて適宜変更)
+#  desc "Powの環境変数をセット"
+#  task :set_powenv_and_symlink do
+#    run "cd #{latest_release} &amp;&amp; echo 'export RAILS_ENV=#{rails_env}' &gt; .powenv"
+#    run "rm -rf /Users/#{user}/.pow/#{application} &amp;&amp; ln -s #{latest_release} ~/.pow/#{application}"
+#  end
+end
+
+# deploy ==========================
+after :deploy, "deploy:migrate"
+#after :deploy, "deploy:set_powenv_and_symlink"
+#after :deploy, "deploy:whenever_update"
+after :deploy, "deploy:cleanup" # 古い履歴のフォルダを削除
+</code></pre>
+
+<h6><a name="section2-2-2-12">メンテナンス画面の設定</h6>
+
+<p>config/maintenace.yml</p>
+
+<pre><code>---
+reason: Someone told me I should type &lt;code&gt;sudo rm -rf /&lt;/code&gt;
+allowed_paths:
+- ^/help
+- ^/contact_us
+allowed_ips:
+- 127.0.0.1
+- 192.168.0.0/24
+</code></pre>
+
+<h6><a name="section2-2-2-13">DB設定</h6>
+
+<p>database.yml</p>
+
+<pre><code># SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+development:
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: 5
+  timeout: 5000
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test: &amp;test
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000
+
+staging:
+  adapter: mysql2
+  database: hcoss_staging
+  username: dev
+  password: 55Hmh0;ks
+  host: development.ccebcwxdebti.ap-northeast-1.rds.amazonaws.com
+  encoding: utf8
+
+production:
+  adapter: mysql2
+  database: hcoss_production
+  username: dev
+  password: 55Hmh0;ks
+  host: development.ccebcwxdebti.ap-northeast-1.rds.amazonaws.com
+  encoding: utf8
+
+
+cucumber:
+  &lt;&lt;: *test
+</code></pre>
+
+<h6><a name="section2-2-2-14">デプロイ前のチェックリスト</h6>
+
+<ul>
+<li><p>deploy.rb, staging.rb, production.rbのパラメータをすべて設定したかチェック</p></li>
+<li><p>ステージングDB、本番DBの設定をdatabase.ymlに追加しているか？</p></li>
+<li><p>デプロイ用Gitリポジトリのブランチが最新の状態か？</p></li>
+</ul>
+
+<h6><a name="section2-2-2-15">デプロイ手順</h6>
+
+<pre><code>$ cap staging deploy:setup
+$ cap staging deploy
+</code></pre>
+
+<h1>参照</h1>
+
+<h2>インフラ</h2>
+
+<p><a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.RDSVPC.html">Amazon Relational Database Service</a>
+<a href="http://recipe.kc-cloud.jp/archives/39">Amazon RDS編～DBインスタンスを立ちあげてみよう！</a>
+<a href="http://recipe.kc-cloud.jp/archives/397">Amazon RDS編～EC2インスタンスからDBインスタンスへの接続～</a>
+<a href="http://blog.serverworks.co.jp/tech/2013/03/08/route53_basic/">営業でも簡単！Route 53の基本設定</a></p>
+
+<h2>ソフトウェア</h2>
+
+<p><a href="https://rvm.io/">RVM</a>
+<a href="http://morizyun.github.io/blog/guard-spork-rspec-tdd/">RSpec/Spork/Guard/Growl/Rails 3.2.11で作る - プリチーなTDD環境！</a>
+<a href="http://blog.digital-squad.net/article/199522761.html">sporkでrspecを高速化</a>
+<a href="http://www.shuwasystem.co.jp/products/7980html/3530.html">入門Jenkins</a>
+<a href="http://books.shoeisha.co.jp/book/b94964.html">The RSpec Book</a>
+<a href="http://www.teps4545.com/2010/01/amazon-rds.html">Amazon RDS 文字化けと格闘</a>
+<a href="http://morizyun.github.io/blog/capistrano-localhost-multi-deploy/">Capistrano 複数環境へのデプロイ</a>
+<a href="http://mytechmemo.info/archives/475">Amazon Linux AMI でRubyを1.9系にする</a>
+<a href="http://d.hatena.ne.jp/dkfj/20120716/1342394784">Amazon-LinuxにRVMを利用してApache+Passenger+Railsのインストール</a></p>
+
+</body>
+</html>

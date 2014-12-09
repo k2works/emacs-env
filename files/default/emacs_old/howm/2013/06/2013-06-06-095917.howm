@@ -1,0 +1,162 @@
+= 受注データ設計
+[2013-06-06 09:59]
+論理設計
+
+order: 受注
+ input_number: 取込番号
+ order_date: 受注日時
+ ec_site: ECサイト
+ order_number: 受注番号
+ memo: メモ
+ customer_name: 注文者氏名
+ customer_name_kana: 注文者カナ
+ customer_sex: 性別
+ customer_birthday: 誕生日
+ customer_country: 注文者国
+ customer_zip: 注文者郵便番号
+ customer_prefectures: 注文者都道府県
+ customer_address: 注文者住所
+ customer_phone_number: 注文者電話番号
+ customer_mail1: メールアドレス1
+ customer_payment_method: 支払方法
+ customer_creditcard_company: カード会社
+ customer_creditcard_number: カード番号
+ customer_creditcard_expiration_date: 有効期限
+ customer_creditcard_holder: カード名義人
+ customer_creditcard_payment: 一括/分割
+ customer_creditcard_installments: 分割回数 
+ amount_claimed: 請求金額
+ amount_total: 合計金額
+ consumption_tax_amount: 消費税
+ freight: 送料
+ commission: 手数料
+ package_charge: 包装料
+ discount: 割引金額
+ points: 利用ポイント
+ gift: ギフト
+ gift_message: ギフトメッセージ
+ notes: 備考
+ status: ステータス
+ latest_sendmail: 直近送信メール
+ ecsite_status: ECサイトステータス
+ credit_limit: カード与信
+ transfer_number: 振込番号
+ transfer_expiration_date: 振込期限日
+ payment_date: 入金日
+ collection_date: 代金回収日
+ last_modified_date: 最終更新日時
+ site_identifier: サイト識別子
+ customer_company: 注文者会社名
+ memo2: メモ２
+ company_memo: 社内メモ
+
+order_detail: 受注明細
+ customer_shipment_name: 送付先氏名
+ customer_shipment_name_kana: 送付先カナ
+ customer_shipment_country: 送付先国
+ customer_shipment_zip: 送付先郵便番号
+ customer_shipment_prefectures: 送付先都道府県
+ customer_shipment_address: 送付先住所
+ customer_shipment_phone: 送付先電話番号
+ customer_shipment_notes: 送付先備考
+ delivery_method: 配送方法
+ desired_delivery_date: 配送希望日
+ desired_delivery_time: 配送希望時間
+ ship_date: 出荷日
+ probable_date_arrival: 到着予定日
+ probable_time_arrival: 到着予定時間
+ delivery_company: 配送会社
+ invoice_number: 送り状番号
+ delivery_completion_date: お届け完了日
+ product_code: 商品番号
+ product_name: 商品名
+ product_sales_unit_price: 単価
+ product_sales_amount: 数量
+ tax_division: 税区分
+ choices: 選択肢
+ customer_shipment_company: 送付先会社名
+ present: プレゼント 
+ receipt: 領収書
+
+物理設計
+order:
+ input_number:integer
+ order_date:date
+ ec_site:string
+ order_number:string
+ memo:text
+ customer_name:string
+ customer_name_kana:string
+ customer_sex:string
+ customer_birthday:date
+ customer_country:string
+ customer_zip:string
+ customer_prefectures:string
+ customer_address:string
+ customer_phone_number:string
+ customer_mail1:string
+ customer_payment_method:string
+ customer_creditcard_company:string
+ customer_creditcard_number:string
+ customer_creditcard_expiration_date:date
+ customer_creditcard_holder:string
+ customer_creditcard_payment:string
+ customer_creditcard_installments:integer
+ amount_claimed:decimal
+ amount_total:decimal
+ consumption_tax_amount:decimal
+ freight:decimal
+ commission:decimal
+ package_charge:decimal
+ discount:decimal
+ points:decimal
+ gift:string
+ gift_message:string
+ notes:text
+ status:string
+ latest_sendmail:string
+ ecsite_status:string
+ credit_limit:string
+ transfer_number:string
+ transfer_expiration_date:date
+ payment_date:date
+ collection_date:date
+ last_modified_date:datetime
+ site_identifier:string
+ customer_company:string
+ memo2:text
+ company_memo:text
+
+order_detail:
+ customer_shipment_name:string
+ customer_shipment_name_kana:string
+ customer_shipment_country:string
+ customer_shipment_zip:string
+ customer_shipment_prefectures:string
+ customer_shipment_address:string
+ customer_shipment_phone:string
+ customer_shipment_notes:text
+ delivery_method:string
+ desired_delivery_date:date
+ desired_delivery_time:time
+ ship_date:date
+ probable_date_arrival:date
+ probable_time_arrival:time
+ delivery_company:string
+ invoice_number:string
+ delivery_completion_date:date
+ product_code:string
+ product_name:string
+ product_sales_unit_price:decimal
+ product_sales_amount:decimal
+ tax_division:string
+ choices:string
+ customer_shipment_company:string
+ present:string
+ receipt:string
+
+ 実装
+ rails g scaffold order input_number:integer order_date:date ec_site:string order_number:string memo:text customer_name:string customer_name_kana:string customer_sex:string customer_birthday:date customer_country:string customer_zip:string customer_prefectures:string customer_address:string customer_phone_number:string customer_mail1:string customer_payment_method:string customer_creditcard_company:string customer_creditcard_number:string customer_creditcard_expiration_date:date customer_creditcard_holder:string customer_creditcard_payment:string customer_creditcard_installments:integer amount_claimed:decimal amount_total:decimal consumption_tax_amount:decimal freight:decimal commission:decimal package_charge:decimal discount:decimal points:decimal gift:string gift_message:string notes:text status:string latest_sendmail:string ecsite_status:string credit_limit:string transfer_number:string transfer_expiration_date:date payment_date:date collection_date:date last_modified_date:datetime site_identifier:string customer_company:string memo2:text company_memo:text
+
+ rails g model order_detail customer_shipment_name:string customer_shipment_name_kana:string customer_shipment_country:string customer_shipment_zip:string customer_shipment_prefectures:string customer_shipment_address:string customer_shipment_phone:string customer_shipment_notes:text delivery_method:string desired_delivery_date:date desired_delivery_time:time ship_date:date probable_date_arrival:date probable_time_arrival:time delivery_company:string invoice_number:string delivery_completion_date:date product_code:string product_name:string product_sales_unit_price:decimal product_sales_amount:decimal tax_division:string choices:string customer_shipment_company:string present:string receipt:string
+

@@ -1,0 +1,3 @@
+= Gitスニペット
+[2013-05-02 12:32] 
+git ls-remote -h git@dev.k2-works.net:hcoss.git

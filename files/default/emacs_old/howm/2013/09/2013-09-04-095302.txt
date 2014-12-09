@@ -1,0 +1,25 @@
+= Railsチューニング
+[2013-09-04 09:53]
+# ミニプロファイラセットアップ
+    gem 'rack-mini-profiler' # 簡易プロファイラ
+
+# ruby-profの設定
+## Gemfile追加
+    gem 'ruby-prof'
+    gem 'rack-contrib'
+## config.ru編集
+    # 特定environmentのみで有効にしたい場合、
+    # if ENV['RACK_ENV'] == 'development' などすると良いです
+    require 'ruby-prof'
+    Rack::RubyProf = RubyProf #エラー対策
+    require 'rack/contrib/profiler'
+    use Rack::Profiler, :printer => :graph_html
+
+    require ::File.expand_path('../config/environment', __FILE__)
+    run MyApp::Application
+
+## 再起動
+    
+# 参照
+[Railsアプリを『浅く』パフォーマンス・チューニングしてみる（その１）](http://www.ohmyenter.com/?p=70)
+[Railsアプリケーションをプロファイリングしよう](http://techracho.bpsinc.jp/baba/2012_01_10/5030)

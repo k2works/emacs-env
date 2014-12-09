@@ -1,0 +1,15 @@
+= EC2にMySQLをインストールする
+[2013-09-18 15:38] 
+>>>EC2
+>>>MySQL
+
+# 手順 #
+
+# 参照 #
+[Amazon EC2 インスタンスを設定する](http://docs.aws.amazon.com/ja_jp/gettingstarted/latest/computebasics-linux/getting-started-deploy-app-download-app.html)
+
+[Amazon EC2 (Amazon Linux) での MySQL インストールと設定](http://blog.genies-ag.jp/2011/08/amazon-ec2-amazon-linux-mysql.html)
+
+[How to install MySQL 5.6 on Amazon Linux EC2 Instance in AWS](http://aws-ome.com/how-to-install-mysql-56-on-amazon-linux-ec2-instance-in-aws.html)
+
+[MySQL WorkbenchでEC2のDBに接続する。](http://mefuit.hateblo.jp/entry/2013/08/31/233456)

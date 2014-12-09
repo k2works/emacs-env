@@ -1,0 +1,915 @@
+= AWSまとめ
+[2013-04-06 09:10]
+* 目的
+  Amaazon Web Serviceとは何かを明確にして今回の目的であるRuby on Railsアプリケーションサーバ構築までの手順を説明する
+* 要素
+** AWS(Amazon Web Service)
+*** [[http://aws.amazon.com/jp/what-is-aws/][アマゾンウェブサービスとは]]
+- 低コスト
+- 即時開始可能でリソースは伸縮自在
+- 自由度と柔軟性
+- 数々の第三者認証をクリアする安全性
+*** [[http://aws.amazon.com/jp/products/][AWSの製品・サービス構成(33)]]
++ コンピュート(4)
+ + Amazon Elastic Cmpute Cloud (EC2)
+ + Amazon Elastic MapReduce
+ + Auto Scaling
+ + Elastic Load Balancing
++ コンテンツ配信(1)
+ + Amazon CloudFron
++ データベース(4)
+ + Amazon Relational Database Service(RDS)
+ + Amazon DynamoDB
+ + Amazon SimpleDB
+ + Amazon ElastiCache
++ デプロイ＆マネジメント(5)
+ + AWS Identity and Access Management(IAM)
+ + Amazon CloudWatch
+ + AWS Elastic Beanstalk
+ + AWS CloudFormation
+ + AWS Data Pipeline
++ アプリケーションサービス(4)
+ + Amazon CloudSearch
+ + Amazon Simple Workflow Service(SWF)
+ + Amazon Simple Queue Service(SQS)
+ + Amazon Simple Notification Service(SNS)
++ ソフトウェア(1)
+ + AWS Marketplace
++ ネットワーク(3)
+ + Amazon Route 53
+ + Amazon Virtual Private Cloud(VPC)
+ + AWS Direct Connect
++ 支払い＆請求(2)
+ + Amazon Flexible Payments Service(FPS)
+ + Amazon DevPay
++ ストレージ(5)
+ + Amazon Simple Storage Service(S3)
+ + Amazon Glacier
+ + Amazon Elastic Block Store(EBS)
+ + AWS Import/Export
+ + AWS Storage Gateway
++ サポート(1)
+ + AWSサポート
++ ウェブトラフィック(2)
+ + Alexa Web Information Service
+ + Alexa Top Sites
++ 労働力(1)
+ + Amazon Mechanical Turk
+*** [[http://aws.amazon.com/jp/solutions/][ソリューション]](6)
++ アプリケーションホスティング
+ 内部ホストアプリケーションから SaaS ソリューションまで、信頼性の高いオンデマンドインフラを使用して、お客様のアプリケーションを駆動することができます
++ バックアップとストレージ
+ AWS の低価格なデータストレージサービスを使用して、データを格納し、信頼できるバックアップソリューションを構築することができます。
++ コンテンツ配信
+ 低コストかつ速いデータ転送速度で、世界中のエンドユーザーにコンテンツを迅速かつ容易に配信することができます。
++ ウェブホスティング
+ AWS の拡張性高いインフラストラクチャプラットフォームで、アクセス・負荷状況によって変化するウェブホスティングのニーズを満たすことができます。
++ エンタープライズIT
+ AWS のセキュリティで保護された環境で、社内や社外向け IT アプリケーションをホストすることができます。
++ データベース
+ ホストされたエンタープライズデータベースソフトウェアや非リレーショナルデータベースソリューションなど、様々な拡張性高いデータベースソリューションを活用することができます。
+*** 使用開始     
++ [[http://aws.amazon.com/jp/free/][無料利用枠]]
+ + [[http://docs.aws.amazon.com/ja_jp/gettingstarted/latest/awsgsg-freetier/TestDriveFreeTier.html][AWS無料範囲とは]]
+  + 自分が対象ユーザーかどうか
+   [[http://calculator.s3.amazonaws.com/calc5.html][AWS 簡易見積りツール ]]
+  + 無料使用範囲でのサービス
+  + Amazon EC2インスタンスの起動
+  + 無料使用範囲でのサンプルアプリケーションのデプロイ
+  + 毎月の無料使用を最大限に活用
+   １つのインスタンスを１ヶ月連続して実行することが可能。
+   １０の小さなインスタンスを１ヶ月に７５時間実行することが可能。
+  + 無料使用範囲内でのAWSサービスの起動
+  + Amazon EC2インスタンスの起動
+  + 無料使用範囲でのサンプルウェブアプリケーションのデプロイ
+  + AWSリソースの使用状況の追跡
+   アカウントアクティビティの表示
+  + 無料使用範囲の有効期限が切れた場合
+   サンプルでだいたい１ヶ月３０００円ぐらい
+  + AWSリソースのクリーアップ
++ クイックスタート
+ - ステップ１：AWSにサインアップ
+ - ステップ２：[[http://docs.aws.amazon.com/ja_jp/gettingstarted/latest/computebasics-linux/getting-started.html][アプリケーションを起動]]
+   + Step 1: Sign Up for the Service
+   + ステップ 2: コマンドラインツールをインストールする
+     [[http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/astools.html#UsingTheCommandLineTools][      Using the Command Line Tools]]
+     1. [[http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/UsingTheCommandLineTools.html][コマンドラインツールをインストールする]]
+     2. [[https://portal.aws.amazon.com/gp/aws/securityCredentials][アクセスキーを取得する]]
+     3. [[http://docs.aws.amazon.com/general/latest/gr/rande.html#as_region][地域を決める]]
+     4. as-cmdが動作するか確認する
+   + ステップ 3: 適切な AMI を見つける
+   + ステップ 4: インスタンスを起動する
+     + インスタンスを設定する。
+     + キーペアを作成する。
+     + セキュリティグループを作成する。
+     + インスタンスを起動する。
+   + ステップ 5: アプリケーションをデプロイする
+     + ウェブブラウザから MindTerm SSH クライアントを使用して Amazon EC2 インスタンスに接続する
+     + PuTTY を使用して Windows コンピュータから Amazon EC2 インスタンスに接続する
+     + Linux/UNIX マシンからスタンドアロンの SSH クライアントを使用して Amazon EC2 インスタンスに接続する
+     + Amazon EC2インスタンスを設定する
+   + 手順6：カスタム AMI を作成
+     + 設定ファイルに権限を設定します。
+     + MySQL サーバーをインストールします。
+     + ウェブサーバーと MySQL を起動します。
+     + データベースを設定します。
+     + アプリケーションを設定します。
+   + 手順 7：Elastic Load Balancing の作成
+   + ステップ 8: Amazon EC2 セキュリティグループを更新する
+   + ステップ 9: Auto Scaling を使用して Amazon EC2 インスタンスを起動する
+   + ステップ 10: CloudWatch アラームを作成する
+   + 手順 11: クリーンアップ
+     + Delete Your CloudWatch Alarm
+     + Delete Your Elastic Load Balancer
+     + Terminate Your Amazon EC2 Instances in Your Auto Scaling Group
+     + インスタンスの終了
+     + キーペアの削除
+     + Delete an Amazon EC2 Security Group
+ - ステップ３：サポート          
+** Ruby on Railsアプリケーションサーバ
+*** EC2,RDSから始めよう
+**** 環境の設定
+     + [[https://portal.aws.amazon.com/gp/aws/securityCredentials][AWSのセキュリテリ証明書]]
+     + コマンドラインツールのインストール
+       + [[http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SettingUp_CommandLine.html][EC2]]
+       + [[http://aws.amazon.com/developertools/2928][RDS]]
+**** 地理的な場所、リージョン、アベラビリティゾーンの選択
+     + リージョン
+     + アベイラビリティゾーン
+       アベイラビリティゾーンとは、各リージョン内の複数の個所に位置するデータセンター群のこと。独立した電力、冷却、物理セキュリティを持ち、ほかのアベイラビリティゾーンから独立して運営されているため、1つのアベイラビリティゾーンで障害が起きてもほかのゾーンに波及することはない。このため、サービスの可用性を担保する目的で、多くのユーザーが複数のゾーンを利用しているという。
+**** アーキテクチャの選択
+     + ロジック＋プレゼンテーション
+       + EC2インスタンス(Railsサーバー)
+     + データ
+       + RDSインスタンス(MySQLデータベース)
+**** EC2上でのRailsサーバーの生成
+     - 鍵ペアの作成
+       AWSコンソールのKey PairsよりCreate Key Pairを実行する
+     - Web/アプリケーションサーバーのセットアップ
+       - インスタンスの起動(Request Instances Wizard)
+         - CHOOSE AN AMI
+         - INSTANCE DETAILS
+           + Number of Instances
+           + Instance Type
+           + Launch Instances
+           + Request Spot Instances
+           + Kernel ID
+           + RAM Disk ID
+           + Monitoring
+           + User Data
+           + Termination Protection
+           + Shutdown Behavior
+           + IAM Role
+           + Storage Device Configuration
+           + Add tags
+         - CREATE KEY PAIR
+           + Choose from your existing Key Pairs
+           + Create a new Key Pair
+           + Proceed without a Key Pair
+         - CONFIGRE FIRWALL
+           + Group Name
+           + Group Description
+           + Inbound Rules
+         - REVIEW
+           + AMI
+             + Name
+             + Description
+           + Instance Details
+             + Number of Instances
+             + Availability Zone
+             + Instance Type
+             + Instance Class
+             + EBS-Optimized
+           + Advanced Details
+             + Monitoring
+             + Tenancy
+             + Kernel ID
+             + RAM Disk ID
+             + Network Interface
+             + Secondary IP Address
+             + User Data
+             + IAM Role
+             + Termination Protecton
+             + Shutdown Behavior
+           + Key Pair
+             + Key Pair Name
+           + Firewall
+             + Security Group(s)
+       - インスタンスの設定
+       - EBSボリュームの生成と利用
+         + [[http://aws.amazon.com/jp/ebs/][Amazon Elastic Block Store(EBS)]]
+           - Amazon EBSボリュームの特徴
+           - Amazon EBSボリュームの使用
+           - Amazon EBSボリュームのパフォーマンス
+           - Amazon EBSボリュームの耐久性
+           - Amazon EBSスナップショット
+           - 費用の見積もり
+         + [[http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html][Amazon Elastic Blaock Store(Amazon EBS)]]
+           - Key Features of EBS Volumes
+           - EBS Volume Types
+           - Common Tasks
+           - Increasing EBS Performance
+           - Creating an Amazon EBS Volume
+           - Attaching a Volume to an Instance
+           - Describing Volumes
+           - Making an Amazon EBS Volume Available for Use
+           - Monitoring the Status of Your Volumes
+           - Detaching an Amazon EBS Volume from an Instance
+           - Deleting an Amazon EBS Volume
+           - Creating an Amazon EBS Snapshot
+           - Copying an Amazon EBS Snapshot
+           - Describing Snapshots
+           - Modifying Snapshot Permissions
+           - Deleting an Amazon EBS Snapshot
+           - Expanding the Storage Space of a Volume
+           - Using Public Data Sets
+           - Amazon EBS API and Command Overview
+         + [[http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device][Storage for the Root Device]]
+         + [[http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/RootDeviceStorage.html][Root Device Volume]]
+         + [[http://sartord.blog6.fc2.com/blog-category-4.html][Amazon Elastic Block Store(EBS)をmysqlに利用]]
+         + [[http://dev.koba206.com/?p=216][EBSボリュームをEC2インスタンスに接続する方法]]
+       - EIPの生成と割当
+       - ソフトウェアのインストール
+         + [[http://www.oiax.jp/rails3book/deploy.html][Rails本番環境構築ガイド]]
+           - VirtualBoxによる仮想マシンのインストール
+             + ネットワークの設定(1)               
+             + ネットワークの設定(2)
+                /etc/network/interfaces
+                auto eth1
+                iface eth1 inet static
+                address 192.168.56.2
+                netmask 255.255.255.0
+             + hostsファイルの書き換え
+                /private/etc
+                192.168.56.2  asagao.oiax.jp
+           - サーバーの準備（Ubuntu Server 12.04 LTS編）  
+             % sudo apt-get update
+             % sudo apt-get upgrade
+             % sudo apt-get install build-essential automake git
+             % sudo apt-get install zlib1g-dev libssl-dev libreadline6-dev libyaml-dev libxml2-dev libxslt-dev
+             % sudo apt-get install libsqlite3-dev libcurl4-openssl-dev
+             % sudo apt-get install apache2 openssh-server apache2-prefork-dev libapr1-dev libaprutil1-dev
+             % sudo apt-get install imagemagick libmagickwand-dev
+           - Ruby 1.9.3のインストール
+             % mkdir ~/src
+             % cd ~/src
+             % wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p392.tar.gz
+             % tar xzf ruby-1.9.3-p392.tar.gz
+             % cd ruby-1.9.3-p392
+             % ./configure
+             % make
+             % sudo make install
+           - Railsアプリケーションのセットアップ
+             + railsユーザーの作成
+              % sudo useradd -m -d /var/rails rails
+              % sudo passwd rails
+              % sudo chmod 750 /var/rails
+             + Apache実行ユーザーをグループに追加
+              % sudo gpasswd -a www-data rails
+             + Bundlerのインストール
+              % sudo gem install bundler --no-ri --no-rdoc
+             + Railsアプリケーションの設置
+              ローカルマシンで asagao ディレクトリをZIP形式で圧縮し、リモートマシンの /var/rails ディレクトリに転送します。
+              % tar cvfz railsdemo.tar.gz
+              % sudo su - rails
+              $ tar zxvf railsdemo.tar.gz
+              % cd railsdemo
+              % bundle install --path=../bundle
+              % RAILS_ENV=production rake db:setup
+              % rake assets:precompile
+              ここで、
+              rake abord
+              Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs for a list of available runtimes.
+              というエラーメッセージが表示された場合には、Gemfileにある
+              # gem 'therubyracer'
+              という行のコメント記号(#)を除去して、bundle install コマンドと rake assets:precompile コマンドを順に実行してください。
+           - ApacheとPhusion Passengerのセットアップ
+             + [[http://gihyo.jp/admin/serial/01/unix/0005][知っておきたいApacheの基礎知識 その1]]
+             + Phusion Passengerのインストール
+              % sudo gem install passenger --no-ri --no-rdoc
+              % sudo passenger-install-apache2-module             
+             + Apacheの準備
+               % sudo -s
+               $ mkdir /var/www/html
+               $ cd /etc
+               $ ln -s apache2 httpd
+               $ cd httpd
+               $ echo "ServerName www.example.com:80" >> httpd.conf
+             + Phusion PassengerをApacheに組み込む
+               /etc/httpd/conf.d/passenger.conf
+                LoadModule passenger_module /usr/local/lib/ruby/gems/1.9.1/gems/passenger-3.0.19/ext/apache2/mod_passenger.so
+                PassengerRoot /usr/local/lib/ruby/gems/1.9.1/gems/passenger-3.0.19
+                PassengerRuby /usr/local/bin/ruby
+             + バーチャルホストの追加
+               /etc/httpd/sites-available/default 
+               <VirtualHost *:80>
+                 DocumentRoot /var/www/html
+                 <Directory /var/www/html>
+                   AllowOverride all
+                   Options None
+                   Order Deny,Allow
+                   Deny from All
+                 </Directory>
+               </VirtualHost>
+
+               /etc/httpd/sites-available/railsdemo
+               <VirtualHost *:80>
+                ServerName http://ec2-54-248-228-199.ap-northeast-1.compute.amazonaws.com/
+                DocumentRoot /var/rails/railsdemo/public
+                RackEnv production
+                <Directory /var/rails/railsdemo/public>
+                  AllowOverride all
+                  Options -MultiViews
+                </Directory>
+               </VirtualHost>
+               
+               $ ln -s /etc/httpd/sites-available/asagao /etc/httpd/sites-enabled/001-asagao
+               EC2ではバーチャルホストがうまくいかない
+               http://hivecolor.com/id/9
+               + Apacheの再起動
+                $ service apache2 restart
+           - データベースとの接続（MySQL編）
+             + MySQLサーバのインストール
+               % sudo apt-get install mysql-server libmysqlclient-dev
+             + MySQLサーバのセットアップ
+               パスワード
+               gnDwPsFVM5kMU (root)
+               diiNv2bid4aTI (railsdemo)
+               % sudo -s
+               % echo "gnDwPsFVM5kMU" > /root/mysql_root_password
+               % echo "diiNv2bid4aTI" > /root/mysql_railsdemo_password
+               % chmod 400 /root/mysql_*_password
+               % exit
+               MySQLを初期化します。
+               % sudo mysql_install_db
+             + データベースおよびユーザーの作成
+               mysql -u root コマンドでMySQLモニターを開きます。
+               $ show databases;
+               
+               rootユーザーのパスワードを変更します。
+               $ SET PASSWORD FOR 'root'@'localhost' = PASSWORD('gnDwPsFVM5kMU');
+               
+               railsdemo_productionデータベースを作り、railsdemoユーザーに全権を与えます。
+               $ CREATE DATABASE railsdemo_production DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+               $ GRANT ALL ON railsdemo_production.* TO 'railsdemo'@'localhost';
+               $ SET PASSWORD FOR 'railsdemo'@'localhost' = PASSWORD('diiNv2bid4aTI');               
+
+               MySQLモニターを抜けます。
+               $ quit
+             + データベース接続の切り替え
+               % sudo su - rails
+               % cd railsdemo
+
+               エディタで Gemfile を開き、
+               gem 'sqlite3'
+
+               を
+
+               gem 'mysql2'
+               に変更します。そして、Bundlerでmysql2ライブラリをインストールします。
+               % bundle install
+
+               config/database.yml
+               production:
+                adapter: mysql2
+                database: railsdemo_production
+                username: railsdemo
+                password: diiNv2bid4aTI
+                host: 127.0.0.1
+                encoding: utf8
+               
+               % RAILS_ENV=production rake db:schema:load
+               % RAILS_ENV=production rake db:seed
+             + Railsアプリケーションの再起動
+               % touch tmp/restart.txt
+           - Capistranoによるデプロイ
+             + SSH公開鍵の設置
+               $ sudo mkdir --mode=700 /var/rails/.ssh
+               $ sudo cp /home/k2works/.ssh/authorized_keys /var/rails/.ssh/
+               $ sudo chown -R rails:rails /var/rails/.ssh
+
+               ローカルマシンからrailsユーザーとしてSSHで接続し、パスワードを尋ねられないことを確認します。
+               % ssh rails@local.railsdemo.k2works.net
+             + railsdemo ディレクトリの削除
+               現在動いている railsdemo ディレクトリと bundle ディレクトリを削除します。
+               $ rm -rf railsdemo bundle
+               $ exit
+             + Capistranoの準備
+               % gem install capistrano
+               % capify .
+
+               config/deploy.rb
+
+               require 'bundler/capistrano'
+               load 'deploy/assets'
+
+               set :application, "railsdemo"
+               set :deploy_to, "/var/rails/railsdemo"
+               set :user, "rails"
+               set :use_sudo, false
+
+               set :repository, "."
+               set :scm, :none
+               set :deploy_via, :copy
+               set :copy_exclude, [ "doc", "log", "tmp" ]
+
+               set :normalize_asset_timestamps, false
+               set :keep_releases, 3
+
+               role :web, "local.railsdemo.k2works.net"
+               role :app, "local.railsdemo.k2works.net"
+               role :db,  "local.railsdemo.k2works.net", :primary => true
+
+               after "deploy:update", :roles => :app do
+                 run "cp #{shared_path}/config/database.yml #{release_path}/config/"
+               end
+
+               after "deploy:update", "deploy:cleanup"
+
+               namespace :deploy do
+                 desc "Restarts your application."
+                 task :restart, :roles => :app do
+                   run "touch #{current_path}/tmp/restart.txt"
+                 end
+               end
+
+              次のコマンドを実行します
+               % cap deploy:setup
+
+               エディタで Gemfile を開き、gem 'sqlite3' の部分を gem 'mysql2' あるいは gem 'pg' と書き換えます。また、
+
+               # gem 'therubyracer'
+               を次のように書き換えます。
+
+               gem 'therubyracer', :platform => :ruby
+             + 仮想ホストの設定変更
+              sudo権限のあるユーザー(kuroda)でリモートホストにログインして、/etc/httpd/sites-available/railsdemo を次のように修正します（要sudo）。
+
+             <VirtualHost *:80>
+             ServerName asagao.oiax.jp
+             DocumentRoot /var/rails/railsdemo/current/public
+             RackEnv production
+             <Directory /var/rails/railsdemo/current/public>
+             AllowOverride all
+             Options -MultiViews
+             </Directory>
+             </VirtualHost>
+            パスの /public の前に current を追加しています（2カ所）。
+
+            そして、Apacheをリロードします。
+            $ sudo service apache2 reload # Ubuntu Server 12.04/10.04 LTS の場合               
+           - Gitレポジトリの作成
+             + Gitレポジトリの作成
+               まずリモートマシンにgitユーザーを作成します。
+
+               $ sudo useradd -m -d /var/git git
+               $ sudo passwd git
+               $ sudo chmod 750 /var/git
+
+               まずリモートマシンにgitユーザーを作成します。
+
+               $ sudo useradd -m -d /var/git git
+               $ sudo passwd git
+               $ sudo chmod 750 /var/git
+
+               $ sudo gpasswd -a rails git
+
+               % scp .ssh/id_rsa.pub git@local.railsdemo.k2works.net:~
+
+               SSH公開鍵をauthorized_keysに加えます。
+
+               $ mkdir -m 700 .ssh
+               $ cat id_rsa.pub >> .ssh/authorized_keys
+               $ chmod 600 .ssh/authorized_keys
+               $ rm id_rsa.pub
+
+               空のレポジトリ asagao.git を作成します。
+
+               $ mkdir asagao.git
+               $ git init --bare --shared=0640 asagao.git
+             + レポジトリにソースコードを登録
+               ローカルマシンのrailsdemoディレクトリに移動して、以下のコマンドを順に実行します。
+
+               % git init
+               % git add .
+               % git commit -m 'initial commit'
+               % git remote add origin git@asagao.oiax.jp:asagao.git
+               % git push origin master
+           - 続・Capistranoによるデプロイ
+             + Capistranoの設定を変更
+
+              ローカルマシンのasagaoディレクトリにある config/deploy.rb をエディタで開き、
+
+              set :repository, "."
+              set :scm, :none
+              set :deploy_via, :copy
+              set :copy_exclude, [ "doc", "log", "tmp" ]
+              と書いてある部分を、次のように修正します。
+
+              set :local_repository, "git@asagao.oiax.jp:asagao.git"
+              set :repository, "/var/git/asagao.git"
+              set :branch, "master"
+              set :scm, :git
+              set :deploy_via, :remote_cache
+         + EC2本番環境設定
+           - サーバーの準備（Ubuntu Server 12.04 LTS編）  
+             % sudo apt-get update
+             % sudo apt-get upgrade
+             % sudo apt-get install build-essential automake git
+             % sudo apt-get install zlib1g-dev libssl-dev libreadline6-dev libyaml-dev libxml2-dev libxslt-dev
+             % sudo apt-get install libsqlite3-dev libcurl4-openssl-dev
+             % sudo apt-get install apache2 openssh-server apache2-prefork-dev libapr1-dev libaprutil1-dev
+             % sudo apt-get install imagemagick libmagickwand-dev
+           - Ruby 1.9.3のインストール
+             % mkdir ~/src
+             % cd ~/src
+             % wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p392.tar.gz
+             % tar xzf ruby-1.9.3-p392.tar.gz
+             % cd ruby-1.9.3-p392
+             % ./configure
+             % make
+             % sudo make install
+           - Railsアプリケーションのセットアップ
+             + railsユーザーの作成
+              % sudo useradd -m -d /var/rails rails
+              % sudo passwd rails
+              % sudo chmod 750 /var/rails
+             + Apache実行ユーザーをグループに追加
+              % sudo gpasswd -a www-data rails
+           - ApacheとPhusion Passengerのセットアップ
+             + [[http://gihyo.jp/admin/serial/01/unix/0005][知っておきたいApacheの基礎知識 その1]]
+             + Phusion Passengerのインストール
+              % sudo gem install passenger --no-ri --no-rdoc
+              % sudo passenger-install-apache2-module             
+             + Apacheの準備
+               % sudo -s
+               $ mkdir /var/www/html
+               $ cd /etc
+               $ ln -s apache2 httpd
+               $ cd httpd
+               $ echo "ServerName www.example.com:80" >> httpd.conf
+             + Phusion PassengerをApacheに組み込む
+               /etc/httpd/conf.d/passenger.conf
+                LoadModule passenger_module /usr/local/lib/ruby/gems/1.9.1/gems/passenger-3.0.19/ext/apache2/mod_passenger.so
+                PassengerRoot /usr/local/lib/ruby/gems/1.9.1/gems/passenger-3.0.19
+                PassengerRuby /usr/local/bin/ruby
+             + バーチャルホストの追加
+               /etc/httpd/sites-available/default 
+               <VirtualHost *:80>
+                 DocumentRoot /var/www/html
+                 <Directory /var/www/html>
+                   AllowOverride all
+                   Options None
+                   Order Deny,Allow
+                   Deny from All
+                 </Directory>
+               </VirtualHost>
+
+               /etc/httpd/sites-available/railsdemo
+               <VirtualHost *:80>
+                ServerName http://railsdemo.k2-works.net
+                DocumentRoot /var/rails/railsdemo/public
+                RackEnv production
+                <Directory /var/rails/railsdemo/public>
+                  AllowOverride all
+                  Options -MultiViews
+                </Directory>
+               </VirtualHost>
+               
+               $ ln -s /etc/httpd/sites-available/railsdemo /etc/httpd/sites-enabled/001-railsdemo
+               EC2ではバーチャルホストがうまくいかない
+               http://hivecolor.com/id/9
+               Route53でサブドメインを設定しておく
+               + Apacheの再起動
+                $ service apache2 restart
+           - データベースとの接続（MySQL編）
+             + MySQLサーバのインストール
+               RDSデータベースを参照
+               ユーザー:railsdemo
+               パスワード:diiNv2bid4aTI
+               $ sudo apt-get install mysql-client-core-5.5
+             + MySQLサーバのセットアップ
+               mysql -h railsdemo.ccebcwxdebti.ap-northeast-1.rds.amazonaws.com -P 3306 -u railsdemo -p
+               password:diiNv2bid4aTI
+               $ show dattabases;
+               $ use railsdemo_production;
+               $ show tables;
+               $ quit
+           - Gitレポジトリの作成
+             + Gitレポジトリの作成
+               まずリモートマシンにgitユーザーを作成します。
+
+               $ sudo useradd -m -d /var/git git
+               $ sudo passwd git
+               $ sudo chmod 750 /var/git
+
+               railsユーザーをgitグループに加えます。/var/gitディレクトリの読み取り権限が与えられることになります。
+               $ sudo gpasswd -a rails git
+
+               ローカルマシンからあなたのSSH公開鍵をgitユーザーのホームディレクトリに転送します。
+               % scp -i k2works.pm .ssh/id_rsa.pub ubuntu@:54.248.228.199:~
+
+               SSH公開鍵をauthorized_keysに加えます。
+               $ mkdir -m 700 .ssh
+               $ cat id_rsa.pub >> .ssh/authorized_keys
+               $ chmod 600 .ssh/authorized_keys
+               $ rm id_rsa.pub
+
+               空のレポジトリ asagao.git を作成します。
+               $ mkdir railsdemo.git
+               $ git init --bare --shared=0640 railsdemo.git
+             + レポジトリにソースコードを登録
+               ローカルマシンのrailsdemoディレクトリに移動して、以下のコマンドを順に実行します。
+
+               % git init
+               % git add .
+               % git commit -m 'initial commit'
+               % git remote add origin git@railsdemo.k2-works.net:railsdemo.git
+               % git push origin master           
+           - Capistranoによるデプロイ
+             + SSH公開鍵の設置
+               $ sudo mkdir --mode=700 /var/rails/.ssh
+               $ sudo cp /home/k2works/.ssh/authorized_keys /var/rails/.ssh/
+               $ sudo chown -R rails:rails /var/rails/.ssh
+
+               ローカルマシンからrailsユーザーとしてSSHで接続し、パスワードを尋ねられないことを確認します。
+               % ssh rails@railsdemo.k2-works.net
+             + Capistranoの準備
+               % gem install capistrano
+               % capify .
+
+               config/deploy.rb
+
+               require 'bundler/capistrano'
+               load 'deploy/assets'
+
+               set :application, "railsdemo"
+               set :deploy_to, "/var/rails/railsdemo"
+               set :user, "rails"
+               set :use_sudo, false
+
+               set :local_repository, "git@demo.k2-works.net:railsdemo.git"
+               set :repository, "/var/git/railsdemo.git"
+               set :branch, "master"
+               set :scm, :git
+               set :deploy_via, :remote_cache
+
+               set :normalize_asset_timestamps, false
+               set :keep_releases, 3
+
+               role :web, "demo.k2-works.net"
+               role :app, "demo.k2-works.net"
+               role :db,  "demo.k2-works.net", :primary => true
+
+               after "deploy:update", :roles => :app do
+                 run "cp #{shared_path}/config/database.yml #{release_path}/config/"
+               end
+
+               after "deploy:update", "deploy:cleanup"
+
+               namespace :deploy do
+                 desc "Restarts your application."
+                 task :restart, :roles => :app do
+                   run "touch #{current_path}/tmp/restart.txt"
+                 end
+               end
+
+              次のコマンドを実行します
+               % cap deploy:setup
+
+               エディタで Gemfile を開き、gem 'sqlite3' の部分を gem 'mysql2' あるいは gem 'pg' と書き換えます。また、
+
+               # gem 'therubyracer'
+               を次のように書き換えます。
+
+               gem 'therubyracer', :platform => :ruby
+
+               $bundle install
+
+               railsユーザーでリモートホストにログインして以下のコマンドを順に実行します。
+               $ cd /var/rails/railsdemo/shared
+               $ mkdir config
+               MySQLを利用している場合は、新規ファイル /var/rails/railsdemo/shared/config/database.yml を次の内容で作成します。
+
+               production:
+                 adapter: mysql2
+                 database: railsdemo_production
+                 username: railsdemo
+                 password: diiNv2bid4aTI
+                 host: railsdemo.ccebcwxdebti.ap-northeast-1.rds.amazonaws.com
+                 encoding: utf8
+
+               $ cap deploy
+             + 仮想ホストの設定変更
+              sudo権限のあるユーザー(kuroda)でリモートホストにログインして、/etc/httpd/sites-available/railsdemo を次のように修正します（要sudo）。
+              <VirtualHost *:80>
+              ServerName asagao.oiax.jp
+              DocumentRoot /var/rails/railsdemo/current/public
+              RackEnv production
+              <Directory /var/rails/railsdemo/current/public>
+              AllowOverride all
+              Options -MultiViews
+              </Directory>
+              </VirtualHost>
+              パスの /public の前に current を追加しています（2カ所）。
+
+              そして、Apacheをリロードします。
+               $ sudo service apache2 reload # Ubuntu Server 12.04/10.04 LTS の場合               
+       - カスタムイメージの作成
+         #インスタンスを明示的に停止させ、ボリュームをデタッチする
+         $ec2-stop-instances i-bb32d8b9
+         $ec2-detach-volume vol-e4bdf3c6
+
+         #指定した名前で、このインスタンスのイメージを生成する
+         $ec2-create-image i-bb32d8b9 -n app-server-20130405 -d 'Rails Application Server'
+         
+         #インスタンスを立ち上げ直し、ボリュームをアタッチし、Elastic IPを割り当てる
+         $ec2-start-instances i-bb32d8b9
+         $ec2-attach-volume vol-e4bdf3c6 -i i-bb32d8b9 -d /dev/sdf
+         $ec2-associate-address 54.248.228.199 -i i-bb32d8b9
+       - ブート/起動時のインスタンスのプロビジョニング
+         + ツールのインストール
+         + 起動スクリプトの作成
+           /etc/init.d/ec2
+           マウントするデバイスがAWSでは/dev/sdfの場合OSでは/dev/xvdfに書き換えられるので注意
+           $ update-rc.d ec2 defaults
+       - ユーザーデータ
+**** Route53
+     - [[http://blog.serverworks.co.jp/tech/2013/03/08/route53_basic/][Route53の設定]]
+       + ドメインを取得する
+       + Route 53に取得したドメインのホストゾーンを登録する
+         - Create Hosted Zone
+           + Domain Name:
+           + Comment:
+       + 各レコードを設定する
+         - Go to Record Sets
+         - Create Record Set
+       + レジストラのネームサーバー情報を更新する
+**** RDSデータベース
+    + DB Security Groups
+      $rds-create-db-security-group production --db-security-group-description 'this RDS is only available on the necessary ports'
+      $rds-authorize-db-security-group-ingress production --cidr-ip 0.0.0.0/0
+      $ds-authorize-db-security-group-ingress production --ec2-security-group-name web --ec2-security-group-owner-id 262470114399
+    + DB Instances
+      - ENGINE SELECTION
+      - DB INSTANCE DETAILS
+        + DB Engine
+        + License Model
+        + DB Engine Version
+        + DB Instance Class
+        + Multi-AZ Deployment
+        + Auto Minor Version Upgrade
+        + Allocated Storage
+        + Use Provisioned IOPS
+        + DB Instance Identifier
+        + Master Username
+        + Master Password
+      - ADDITIONAL CONFIGURATION
+        + Database Name
+        + Choose a VPC
+        + Availabilty Zone
+        + Option Group
+        + Parameter Group
+        + DB Security Group(s)
+      - MANAGEMENT OPTIONS
+        + Backup Retention Period
+        + Backup Window
+        + Maintenace Window
+    + 日本語対応
+      $rds-create-db-instance production --engine MySQL --engine-version 5.5.27 --db-instance-class db.t1.micro --allocated-storage 5 --master-username rails --master-user-password rails123 --db-security-groups production --backup-retention-period 3
+     [[http://qiita.com/items/341ca51b4f8a510b60ba][ AWS RDSのMysql設定がインスタンス立ち上げた状態ではUTF-8になってなく、文字化けで困った時の対処メモ]]
+      rds-create-db-parameter-group production -f mysql5.5 -d "DB Parameter Group for utf8"
+      rds-modify-db-parameter-group production -p "name=character_set_client, value=utf8, method=immediate"
+      rds-modify-db-parameter-group production -p "name=character_set_connection, value=utf8, method=immediate"
+      rds-modify-db-parameter-group production -p "name=character_set_database, value=utf8, method=immediate"
+      rds-modify-db-parameter-group production -p "name=character_set_results, value=utf8, method=immediate"
+      rds-modify-db-parameter-group production -p "name=character_set_server, value=utf8, method=immediate"
+      [[http://www.teps4545.com/2010/01/amazon-rds.html][Amazon RDS 文字化けと格闘]]
+      mysql> alter railsdemo_production mydb default character set utf8;
+      mysql> show variables like '%character%';
+
+      railsユーザーになってサイドDB migrateb% RAILS_ENV=production rake db:schema:load
+      % RAILS_ENV=production rake db:seed
+    + データベーステーブル・データの登録
+      % RAILS_ENV=production rake db:schema:load
+      % RAILS_ENV=production rake db:seed
+**** まとめ
+* 詳細
+* 注意事項
+  + AWS利用にはクレジットカードが必要
+* 疑問
+  + ElastiCacheとCloudFrontの違いは何？
+  + S3とEBSの違いは何？
+* 参照
++ [[http://aws.amazon.com/jp/whitepapers/][AWS クラウドコンピューティング ホワイトペーパー]]
+  + [[http://media.amazonwebservices.com/AWS_Web_Hosting_Best_Practices.pdf][Web Application Hosting in the AWS Cloud Best Practices]]
+* [[http://docs.aws.amazon.com/ja_jp/gettingstarted/latest/computebasics-linux/web-app-hosting-intro.html][AWS Computing Basics for Linux 入門ガイド (「使用開始」セクション以外は英語版)]]
+** [[http://docs.aws.amazon.com/ja_jp/gettingstarted/latest/computebasics-linux/web-app-hosting-intro.html][Overview]]
+*** やらないいけないこと
++ Set up a computer to run your application.
++ Secure your application and resources.
++ Set up your network for users to access your application.
++ Scale your application.
++ Monitor your application and resources.
++ Ensure that your application is fault-tolerant.
+*** できるようになること
++ Sign up for AWS.
++ Launch, connect, secure, and deploy Drupal to a computer in the cloud.
++ Create a custom template of a computer containing the hardware, software, and configuration you need.
++ Set up a load balancer to distribute traffic across multiple computers in the cloud.
++ Scale your fleet of computers in the cloud.
++ Monitor the health of your application and computers.
++ Clean up 
+*** Introduction to AWS
+**** Cmputing Resources
+     AMI(Amazon Machin Image)
+     EC2 instance
+     store-backed
+     EBS-backed
+     [[http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device][Basice of Amazon EBS-Backed AMIs and Instances]]
+**** Security
+     "ec2-user" or "root"
+**** Monitoring
+     Amazon CoudWath
+     [[http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check.html][Monitoring the Status of Your Instances]]
+**** Networking
+     Elastic Load Balancing
+     Amazon Route 53
+     Amazon VPN
+     [[http://docs.aws.amazon.com/AmazonVPC/latest/GettingStartedGuide/GetStarted.html][Getting Started with Amazon VPC]]
+**** Fault-tolerance     
+** [[http://docs.aws.amazon.com/ja_jp/gettingstarted/latest/computebasics-linux/getting-started.html][使用開始]]
+*** Step 1: Sign Up for the Service
+*** ステップ 2: コマンドラインツールをインストールする
+    [[http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/astools.html#UsingTheCommandLineTools][Using the Command Line Tools]]
+    1. [[http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/UsingTheCommandLineTools.html][コマンドラインツールをインストールする]]
+    2. [[https://portal.aws.amazon.com/gp/aws/securityCredentials][アクセスキーを取得する]]
+    3. [[http://docs.aws.amazon.com/general/latest/gr/rande.html#as_region][地域を決める]]
+    4. as-cmdが動作するか確認する
+*** ステップ 3: 適切な AMI を見つける
+*** ステップ 4: インスタンスを起動する
+    + インスタンスを設定する。
+    + キーペアを作成する。
+    + セキュリティグループを作成する。
+    + インスタンスを起動する。
+*** ステップ 5: アプリケーションをデプロイする
+    + ウェブブラウザから MindTerm SSH クライアントを使用して Amazon EC2 インスタンスに接続する
+    + PuTTY を使用して Windows コンピュータから Amazon EC2 インスタンスに接続する
+    + Linux/UNIX マシンからスタンドアロンの SSH クライアントを使用して Amazon EC2 インスタンスに接続する
+    + Amazon EC2インスタンスを設定する
+*** 手順6：カスタム AMI を作成
+    + 設定ファイルに権限を設定します。
+    + MySQL サーバーをインストールします。
+    + ウェブサーバーと MySQL を起動します。
+    + データベースを設定します。
+    + アプリケーションを設定します。
+*** 手順 7：Elastic Load Balancing の作成
+*** ステップ 8: Amazon EC2 セキュリティグループを更新する
+*** ステップ 9: Auto Scaling を使用して Amazon EC2 インスタンスを起動する
+*** ステップ 10: CloudWatch アラームを作成する
+*** 手順 11: クリーンアップ
+    + Delete Your CloudWatch Alarm
+    + Delete Your Elastic Load Balancer
+    + Terminate Your Amazon EC2 Instances in Your Auto Scaling Group
+    + インスタンスの終了
+    + キーペアの削除
+    + Delete an Amazon EC2 Security Group
+** Pircing
+*** Amazon EC2 Cost Breakdown
+*** Summing It All Up
+*** How To Further Save Costs
+* [[http://docs.aws.amazon.com/gettingstarted/latest/wah-linux/web-app-hosting-intro.html][AZWS Web Application Hosting for Linux 入門ガイド (英語版) ]]
+** Step 1: Sign Up for the Service
+** Step 2: Install the Command Line Tools
+** Step 3: Create an Elastic Load Balancer
+** Step 4: Create and Configure Your Amazon EC2 Security Group
+** Step 5: Create a Key Pair
+** Step 6: Launch Amazon EC2 Instances Using Auto Scaling
+** Step 7: Create a CloudWatch Alarm
+** Step 8: Add Amazon RDS
+   + Create a DB Security Group
+   + Authorize Access
+   + Launch an Instance
+** Step 9: Deploy Your Application
+** Step10: Create a Custom AMI
+** Step11: Launch New Environments Using AWS CloudFormation
+   + Create an AWS CloudFormation Template
+   + Modify a CloudFormation Template
+   + Create an AWS CloudFormation Stack
+** Step12: Clean Up
+* [[http://docs.aws.amazon.com/gettingstarted/latest/swh/website-hosting-intro.html][AWS Static Website Hosting 入門ガイド (英語版) ]]
+** Overview
+   + Sign up for AWS.
+   + Create a location to store static files for your website.
+   + Create a content delivery network.
+   + Clean up your AWS resources.
+** Getting Started
+   - Step 1: Sign Up for the Service
+   - Step 2: Create an Amazon S3 Bucket
+   - Step 3: Create an Amazon CloudFront Distribution
+   - Step 4: Hosting Your Website
+   - Step 5: Clean Up
+     + Disable and Delete an Amazon CloudFront Distribution
+     + Delete Objects and an Amazon S3 Bucket
+
+

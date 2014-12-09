@@ -1,0 +1,56 @@
+= screenメモ
+[2013-04-19 10:00] 
+http://sanrinsha.lolipop.jp/blog/2011/07/screen.html#i-7
+コピー関連のキーバインドをVim風に
+
+SyntaxHighlighterについて
+.screenrc
+#Vimのビジュアルモード風にコピー
+markkeys ' =v'
+markkeys ' =y'
+#/?をインクリメンタルサーチに
+markkeys "^S=/"
+markkeys "^R=?"
+bind p paste .
+
+^A-Escでコピー・スクロールバックモードに入る
+vで領域の選択開始
+カーソルを動かして領域を選択、もうyでその領域をコピー
+Escでコピー・スクロールバックモードを終了
+^A-pでペースト
+
+http://www.ayu.ics.keio.ac.jp/~mukai/tips/screen.html
+
+開発版GNU Screenでコピペを極める
+http://yskwkzhr.blogspot.jp/2011/12/master-copy-and-paste-of-gnu-screen.html
+
+Emacs 使いの方は markkeys でコピーモードのキーマップを変更できます。GNU screen [interface] によると stuff と組み合わせることで２ストロークキーの割り当ても出来るみたいです。Ctrl-A は開発版で追加されていますね。
+
+markkeys j=^N:k=^P:l=^F:0=^A:$=^E:^F=^V
+bindkey -m -t ^[v    stuff ^B
+bindkey -m    ^B     stuff h
+bindkey -m -t ^[a    stuff \^
+bindkey -m -t ^[f    stuff w
+bindkey -m -t ^[b    stuff b
+bindkey -m -t ^[0^[r stuff H
+# Nothing for 'M'
+bindkey -m -t ^[-^[r stuff L
+bindkey -m -t ^[<    stuff g
+bindkey -m -t ^[>    stuff G
+bindkey -m -t ^[d    stuff " e "
+
+コピーペースト
+
+screenレベルでのコピペが可能
+
+
+http://d.hatena.ne.jp/bellbind/20051119/1132432648
+ctrl+a [ : コピーモード開始
+カーソルキー : カーソル移動
+c : 矩形選択左側設定
+shift+c : 矩形選択右側設定
+ENTER : コピースタート設定
+ENTER : コピーエンド設定＆コピー＆コピーモード終了
+ctrl+a ] : ペースト
+
+

@@ -1,0 +1,8 @@
+= UbuntでRailsの環境を作る
+[2013-09-15 13:30] 
+# RVMの設定
+    rvm requirements
+    rvm remove 1.9.3-p392
+    rvm install 1.9.3-p392
+    
+[Ubuntu 12.04 here: the answers here helped, but were also misleading.](http://stackoverflow.com/questions/8176076/how-to-get-readline-support-in-irb-using-rvm-on-ubuntu-11-10)

@@ -1,0 +1,289 @@
+= CI環境構築手順
+[2013-07-02 15:15] 
+# 目的
++  継続的インテグレーション環境を構築して高品質で短期的にシステムを開発する環境を構築する
+ 
+# 前提条件
++ AmazonWebService(AWS)が利用可能である。
++ AWSアカウントが作成済みである。
++ ドメイン管理をRoute53に移行している。
+
+# 環境構築手順
+## インフラストラクチャ
+### AWS環境の構築
+#### ローカル環境の設定
+##### コマンドラインツールの設定
+###### コマンドラインツールをダウンロードする。
+[Amazon EC2 API Tools](http://aws.amazon.com/developertools/351)
+   
+###### コマンドラインツールをセットアップする。
+1. Javaのパスを設定する。
+ ローカル環境のJavaのパスをコマンドラインツールに教える
+    
+        $ export JAVA_HOME=/'Javaのパス'
+    
+ Javaのバージョンは1.6かそれ以上
+    
+        $ java -version
+    
+1. コマンドラインツールの場所を設定する。  
+ ダウンロードしたコマンドラインツールを配置した場所<path-to-tools>を設定する。
+    
+        $ export EC2_HOME=<path-to-tools>
+    
+1. アクセス証明書の設定をする。
+ 以下のページからX.509証明書の作成を依頼してアクセスキーIDとシークレットアクセスキーをダウロードする。
+ [アクセス証明書](https://portal.aws.amazon.com/gp/aws/securityCredentials)
+![X.509証明書の作成](https://dev.k2-works.net/attachments/download/10/I-0001.png)
+
+        $ export AWS_PRIVATE_KEY=your-aws-access-key
+        $ export AWS_CERT=your-aws-secret-key
+    
+1. 起動スクリプト(initaws)を作成する。
+  
+        #!/bin/bash
+        # AWS Common
+        export JAVA_HOME="Javaのパス"
+        export EC2_KEY_DIR="アクセスキーIDとシークレットアクセスキーを保存しているパス"
+        export EC2_PRIVATE_KEY="${EC2_KEY_DIR}/アクセスキーIDファイル名"
+        export EC2_CERT="${EC2_KEY_DIR}/シークレットアクセスキーファイル名"
+        # EC2
+        export EC2_HOME="コマンドラインツールを保存している場所"
+        export EC2_URL=https://ec2.ap-northeast-1.amazonaws.com
+        
+1. コマンドラインツールが動作するか確認する。
+  
+        $ source initaws
+        $ ec2-describe-regions
+
+##### SSHクライアントをインストールする
+##### 参照
+[コマンドラインツール設定（英語)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SettingUp_CommandLine.html#set_aes_home_linux)
+[About AWS Security Credentials](http://docs.aws.amazon.com/AWSSecurityCredentials/1.0/AboutAWSCredentials.html#AccessKeys)
+#### EC2インスタンス作成
+![Step0](https://dev.k2-works.net/attachments/download/19/I-0002-1.png)
+
+![Step1](https://dev.k2-works.net/attachments/download/11/I-0002.png)
+
+![Step2](https://dev.k2-works.net/attachments/download/12/I-0003.png)
+
+![Step3](https://dev.k2-works.net/attachments/download/13/I-0004.png)
+
+![Step4](https://dev.k2-works.net/attachments/download/14/I-0005.png)
+
+![Step5](https://dev.k2-works.net/attachments/download/15/I-0006.png)
+
+![Step6](https://dev.k2-works.net/attachments/download/16/I-0007.png)
+
+![Step7](https://dev.k2-works.net/attachments/download/17/I-0008.png)
+
+![Step8](https://dev.k2-works.net/attachments/download/18/I-0009.png)
+
+![Step9](https://dev.k2-works.net/attachments/download/20/I-0010.png)
+
+#### Elastic IPの割当
+![Step](https://dev.k2-works.net/attachments/download/21/I-0011.png)
+
+![Step](https://dev.k2-works.net/attachments/download/22/I-0012.png)
+
+![Step](https://dev.k2-works.net/attachments/download/23/I-0013.png)
+
+![Step](https://dev.k2-works.net/attachments/download/24/I-0014.png)
+
+#### Route53でホスト名の割当
+
+#### RDSインスタンスの作成
+![](https://dev.k2-works.net/attachments/download/31/I-0015.png)
+
+![](https://dev.k2-works.net/attachments/download/32/I-0016.png)
+
+![](https://dev.k2-works.net/attachments/download/33/I-0017.png)
+
+![](https://dev.k2-works.net/attachments/download/34/I-0018.png)
+
+![](https://dev.k2-works.net/attachments/download/35/I-0019.png)
+
+![](https://dev.k2-works.net/attachments/download/36/I-0020.png)
+
+![](https://dev.k2-works.net/attachments/download/37/I-0021.png)
+
+![](https://dev.k2-works.net/attachments/download/38/I-0022.png)
+
+![](https://dev.k2-works.net/attachments/download/39/I-0023.png)
+
+![](https://dev.k2-works.net/attachments/download/40/I-0024.png)
+
+![](https://dev.k2-works.net/attachments/download/41/I-0025.png)
+
+![](https://dev.k2-works.net/attachments/download/42/I-0026.png)
+
+![](https://dev.k2-works.net/attachments/download/43/I-0027.png)
+
+![](https://dev.k2-works.net/attachments/download/44/I-0028.png)
+
+![](https://dev.k2-works.net/attachments/download/45/I-0029.png)
+
+#### 参照
+[Amazon Relational Database Service](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.RDSVPC.html)
+[Amazon RDS編～DBインスタンスを立ちあげてみよう！](http://recipe.kc-cloud.jp/archives/39)
+[Amazon RDS編～EC2インスタンスからDBインスタンスへの接続～](http://recipe.kc-cloud.jp/archives/397)
+
+## ソフトウェア
+### OSの設定
+1. yumのアップデート
+
+        $ yum check-updates
+        $ sudo yum update
+
+1. SQLクライアントのインストール及び接続の確認
+
+        $  yum search MySQL | grep 'client'
+        $  sudo yum install mysql55.x86_64
+        $ mysql -h development.cfxq9mnwsm8s.ap-northeast-1.rds.amazonaws.com -P 3306 -u devdaito -p development
+
+#### sshログイン設定
+   ローカル
+
+    $ ssh-keygen
+    $ scp -i daito-dev.pem ~/.ssh/id_rsa.pub ec2-user@54.250.157.204:~
+
+   リモート
+
+    $ cat id_rsa.pub >> .ssh/authorized_keys
+    $ rm id_rsa.pub
+    
+   ローカル
+
+    $ ssh ec2-user@54.250.157.204
+    
+#### 起動スクリプトの追加
+1. .ec2ディレクトリの作成
+   リモート
+   
+        $ mkdir .ec2
+        
+1. 認証ファイルのコピー
+   ローカル
+
+        $ scp -i daito-dev.pem daito.ai-hide.net/pk-RQD5MX5D2YLOVDC27GMN2IHHGCAO255A.pem ec2-user@54.250.157.204:~/.ec2/
+        $ scp -i daito-dev.pem daito.ai-hide.net/cert-RQD5MX5D2YLOVDC27GMN2IHHGCAO255A.pem ec2-user@54.250.157.204:~/.ec2/
+                
+1. ec2-api-toolsのコピー
+   AmazonLinuxの場合既に導入されているので不要
+1. perlのインストール
+   AmazonLinuxの場合既に導入されているので不要
+1. jdkのインストール
+   AmazonLinuxの場合既に導入されているので不要
+1. 起動スクリプトの作成
+   以下のスクリプトファイルをリモートにアップロードする
+
+        #!/bin/bash
+        ### BEGIN INIT INFO
+        # Provides:          ec2-instance-provisioning
+        # Required-Start:    $network $local_fs
+        # Required-Stop:     $apache2
+        # Should-Start:      $named
+        # Should-Stop:
+        # Default-Start:     2 3 4 5
+        # Default-Stop:      0 1 6
+        # Short-Description: ec2 houskeeping
+        # Description:       attach elastic id on start
+        ### END INIT INFO
+
+        #        
+        # ec2-elastic - do some ec2 houskeeping
+        #     (attaching/detaching volumes, mounting volumes, etc.)
+        #
+
+        export EC2_KEY_DIR=/root/.ec2
+        export EC2_PRIVATE_KEY=${EC2_KEY_DIR}/pk-RQD5MX5D2YLOVDC27GMN2IHHGCAO255A.pem
+        export EC2_CERT=${EC2_KEY_DIR}/cert-RQD5MX5D2YLOVDC27GMN2IHHGCAO255A.pem
+        export EC2_URL="https://ec2.ap-northeast-1.amazonaws.com"
+        MAX_TRIES=60
+        
+        prog=$(basename $0)
+        logger="logger -t $prog"
+        curl="curl --retry 3 --silent --show-error --fail"
+        # this URL gives us information about the current instance
+        instance_data_url=http://169.254.169.254/latest
+        region="ap-northeast-1"
+        elastic_ip=54.250.157.204
+        
+        #Wait until networking is up on the EC2 instance.
+        perl -MIO::Socket::INET -e '
+         until(new IO::Socket::INET("169.254.169.254:80"))
+         {print"Waiting for network...\n";sleep 1}
+        ' | $logger
+        
+        # start/stop functions for OS
+
+        start() {
+            ctr=0
+            # because the instance might change we have to get the id dynamically
+            instance_id=$($curl $instance_data_url/meta-data/instance-id)
+            /bin/echo "Associating Elastic IP."
+            ec2-associate-address $elastic_ip -i $instance_id  --region=$region
+        }
+
+        stop() {
+            /bin/echo "Diassociating Elastic IP."
+            ec2-disassociate-address $elastic_ip --region=$region
+
+        }
+
+        case "$1" in
+            start)
+                start
+                ;;
+        
+            stop)
+                stop
+                ;;
+            restart)
+                stop
+                sleep 5
+                start
+                ;;
+            *)
+                echo "Using: $SELF {start|stop|restart}"
+                exit 1
+                ;;
+        
+            esac
+        
+        exit 0
+
+    ローカル
+
+        $ scp -i daito-dev.pem daito.ai-hide.net/ec2 ec2-user@54.250.157.204:~/.ec2/
+   
+1. 起動スクリプトの設定
+   リモート
+
+        $ sudo su
+        # mdkir .ec2
+        # cp -r /home/ec2-user/.ec2/* .ec2/
+        # cp .ec2/ec2 /etc/init.d/
+        # chkconfig --add ec2
+        # chkconfig ec2 on              
+
+    インスタンス再起動後にElasticIPが割り付けられていればOK
+    
+### ミドルウェアの設定
+#### RDMSの構築
+#### ALMツールの構築
+##### Aluminumインストール
+##### プロジェクトの登録
+#### SCMツールの構築
+##### Gitユーザーの作成
+##### Gitレポジトリの設定
+
+#### CIサーバの構築
+##### Jenkinsセットアップ
+###### Railsをビルドするジョブを作成する
+##### コードインスペクション
+###### コードカバレッジ分析
+###### コード品質の検査
+###### 重複コード（コピー＆ペースト）の検出
+##### ドキュメント生成
+#### 参照

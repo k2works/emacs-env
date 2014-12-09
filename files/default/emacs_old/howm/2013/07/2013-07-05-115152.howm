@@ -1,0 +1,131 @@
+= AWSでの公開鍵の登録に関して
+[2013-07-05 11:51] 
+# 目的
+* 暗号鍵方式に関する理解とAWSでどのように設定するかを理解する
+
+# 前提条件
+* EC2インスタンスが作成されている
+
+# 構成
+* [公開鍵暗号方式とは](#section1)
+
+* [AWSの初期構成](#section2)
+
+* [AWSで作成したユーザー用SSH公開鍵設置手順](#section3)
+
+# 詳細
+## <a name="section1">公開鍵暗号方式とは
+公開鍵暗号方式で暗号化と復号化を行う場合、次のような特徴があります。
+
+* 公開鍵で暗号化したデータは秘密鍵でしか復号できない
+* 秘密鍵で暗号化したデータは公開鍵でしか復号できない
+
+Amazonでは共通鍵暗号方式が採用されている。
+
+* キーペア(Key Pair)は、起動するEC2インスタンスに自動的に設定される公開鍵のこと。起動したEC2インスタンスに、いきなり公開鍵認証でサーバにログインできるのには驚いたけど、キーペアはそのためのもの。
+
+* アクセスキーは、RESTまたはQuery APIを実行する際につかう。対象鍵暗号(共通鍵暗号)方式で、シークレットアクセスキーがその鍵となる。リクエストを共通鍵で暗号化して送る。URIを署名するのにも使われる。90日ごとに変更することが推奨されている。
+
+* X.509証明書は、一般的には主にSSLやSSHで使われているもので、AWSではSOAP APIの呼び出しに使う。公開鍵暗号方式。キーペアと同じ方式のものなので、なぜ二種類あるのかと思ったのだが、単に用途が違った。
+
+## <a name="section2">AWSの初期構成
+
+* キーペアはマネジメントコンソールのKey Pairsにて管理する。
+
+![](https://dev.k2-works.net/attachments/download/61/aws_key-0001.png)
+
+* 作成したキーペアーを秘密鍵としてEC2インスタンス作成時に指定する。
+
+* ここで作成するキーペアは公開鍵暗号方式の秘密鍵にあたるので作成時一回しかダウンロードできない。
+
+* ダウンロードしたキーペアを無くすと再ダウンロードはできないので２度とEC2インスタンスにログインできなくなる。
+
+## <a name="section3">AWSで作成したユーザー用SSH公開鍵設置手順
+
+1. ログイン情報をマネジメントコンソールで確認する。
+
+![](https://dev.k2-works.net/attachments/download/62/aws_key-0002.png)
+
+![](https://dev.k2-works.net/attachments/download/64/aws_key-0004.png)
+
+![](https://dev.k2-works.net/attachments/download/63/aws_key-0003.png)
+
+1. デフォルトユーザーでログインする。
+
+        $ ssh -i daito-dev.pem ec2-user@54.250.146.158
+        The authenticity of host '54.250.146.158 (54.250.146.158)' can't be established.
+        RSA key fingerprint is 9d:0f:dd:70:a1:e8:92:c0:9c:8c:f3:65:d1:b6:50:ff.
+        Are you sure you want to continue connecting (yes/no)? yes
+
+        Warning: Permanently added '54.250.146.158' (RSA) to the list of known hosts.
+
+        __|  __|_  )
+        _|  (     /   Amazon Linux AMI
+        ___|\___|___|
+
+        https://aws.amazon.com/amazon-linux-ami/2013.03-release-notes/
+        
+1. デフォルトユーザのホームディレクトリ/.ssh以下にあるauthorized_keysに登録されている公開鍵のみアクセスできる。
+
+        [ec2-user@ip-172-31-31-119 ~]$ ls -al ~/.ssh/authorized_keys
+        -rw------- 1 ec2-user ec2-user 391  7月  5 02:58 2013 /home/ec2-user/.ssh/authorized_keys
+
+1. まずローカルマシンの公開鍵をEC2インスタンスに登録して秘密鍵無しでログインできるようにする。
+
+        $ ssh ec2-user@54.250.146.158
+        Permission denied (publickey).
+        $ scp -i daito-dev.pem ~/.ssh/id_rsa.pub ec2-user@54.250.146.158:~
+        id_rsa.pub                                    100%  407     0.4KB/s   00:00            
+        $ ssh -i daito-dev.pem ec2-user@54.250.146.158
+        Last login: Fri Jul  5 04:33:22 2013 from i218-47-253-116.s41.a034.ap.plala.or.jp
+        
+        __|  __|_  )
+        _|  (     /   Amazon Linux AMI
+        ___|\___|___|
+        
+        https://aws.amazon.com/amazon-linux-ami/2013.03-release-notes/
+        $ cat id_rsa.pub >> .ssh/authorized_keys
+        $ rm id_rsa.pub
+        $ exit
+        $ ssh ec2-user@54.250.146.158
+
+1. 続いて新規ユーザーを登録して同様にログインできるようにする。
+
+        $ ssh ec2-user@54.250.146.158
+        $ sudo useradd newuser
+        $ sudo passwd newuser
+        $  su newuser
+        $ cd ~
+        $ mkdir -m 700 .ssh
+        $ exit
+        $ sudo cp /home/ec2-user/.ssh/authorized_keys /home/newuser/.ssh/
+        $ sudo ls -al /home/newuser/.ssh/
+        合計 12
+        drwx------ 2 newuser newuser 4096  7月  5 05:21 2013 .
+        drwx------ 3 newuser newuser 4096  7月  5 04:56 2013 ..
+        -rw------- 1 root    root     798  7月  5 05:21 2013 authorized_keys
+        $ sudo chown newuser:newuser /home/newuser/.ssh/authorized_keys
+        $ sudo ls -al /home/newuser/.ssh/
+        合計 12
+        drwx------ 2 newuser newuser 4096  7月  5 05:21 2013 .
+        drwx------ 3 newuser newuser 4096  7月  5 04:56 2013 ..
+        -rw------- 1 newuser newuser  798  7月  5 05:21 2013 authorized_keys
+        $ exit
+        logout
+        Connection to 54.250.146.158 closed.
+        $ ssh newuser@54.250.146.158
+    
+        __|  __|_  )
+        _|  (     /   Amazon Linux AMI
+        ___|\___|___|
+                
+
+# 参照
+
+[共通鍵暗号と公開鍵暗号の解説とSSHでの認証手順](http://www.adminweb.jp/web-service/ssh/index4.html)
+
+[共通鍵暗号](http://ja.wikipedia.org/wiki/%E5%85%B1%E9%80%9A%E9%8D%B5%E6%9A%97%E5%8F%B7)
+
+[AWSで使われるセキュリティ証明書](http://www.fprog.org/~mura-masa/diary/?date=20110809)
+
+[About AWS Security Credentials](http://docs.aws.amazon.com/AWSSecurityCredentials/1.0/AboutAWSCredentials.html#Introduction)

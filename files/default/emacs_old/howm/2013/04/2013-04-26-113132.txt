@@ -1,0 +1,284 @@
+                        ステージング環境の構築
+                        ======================
+
+Author: 柿木 勝之
+Date: 2013-05-01 09:48:47 JST
+
+
+  - サーバーの準備（Cent OS 6.3編）  
+    [Rails本番環境構築ガイド]
+    % sudo apt-get update
+    % sudo apt-get upgrade
+    % sudo apt-get install build-essential automake git
+    % sudo apt-get install zlib1g-dev libssl-dev libreadline6-dev libyaml-dev libxml2-dev libxslt-dev
+    % sudo apt-get install libsqlite3-dev libcurl4-openssl-dev
+    % sudo apt-get install apache2 openssh-server apache2-prefork-dev libapr1-dev libaprutil1-dev
+    % sudo apt-get install imagemagick libmagickwand-dev
+  - Ruby 1.9.3のインストール
+    % mkdir ~/src
+    % cd ~/src
+    % wget [http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p392.tar.gz]
+    % tar xzf ruby-1.9.3-p392.tar.gz
+    % cd ruby-1.9.3-p392
+    % ./configure
+    % make
+    % sudo make install
+  - Railsアプリケーションのセットアップ
+    + railsユーザーの作成
+     % sudo useradd -m -d /var/rails rails
+     % sudo passwd rails
+     % sudo chmod 750 /var/rails
+    + Apache実行ユーザーをグループに追加
+     % sudo gpasswd -a www-data rails
+  - ApacheとPhusion Passengerのセットアップ
+    + [知っておきたいApacheの基礎知識 その1]
+    + Phusion Passengerのインストール
+     % sudo gem install passenger --no-ri --no-rdoc
+     % sudo passenger-install-apache2-module             
+    + Apacheの準備
+      % sudo -s
+      $ mkdir /var/www/html
+      $ cd /etc
+      $ ln -s apache2 httpd
+      $ cd httpd
+      $ echo "ServerName www.example.com:80" >> httpd.conf
+    + Phusion PassengerをApacheに組み込む
+      /etc/httpd/conf.d/passenger.conf
+       LoadModule passenger_module /usr/local/lib/ruby/gems/1.9.1/gems/passenger-3.0.19/ext/apache2/mod_passenger.so
+       PassengerRoot /usr/local/lib/ruby/gems/1.9.1/gems/passenger-3.0.19
+       PassengerRuby /usr/local/bin/ruby
+    + バーチャルホストの追加
+      /etc/httpd/sites-available/default 
+      <VirtualHost *:80>
+        DocumentRoot /var/www/html
+        <Directory /var/www/html>
+          AllowOverride all
+          Options None
+          Order Deny,Allow
+          Deny from All
+        </Directory>
+      </VirtualHost>
+
+      /etc/httpd/sites-available/railsdemo
+      <VirtualHost *:80>
+       ServerName [http://railsdemo.k2-works.net]
+       DocumentRoot /var/rails/railsdemo/public
+       RackEnv production
+       <Directory /var/rails/railsdemo/public>
+         AllowOverride all
+         Options -MultiViews
+       </Directory>
+      </VirtualHost>
+      
+      $ ln -s /etc/httpd/sites-available/railsdemo /etc/httpd/sites-enabled/001-railsdemo
+      EC2ではバーチャルホストがうまくいかない
+      [http://hivecolor.com/id/9]
+      Route53でサブドメインを設定しておく
+      + Apacheの再起動
+       $ service apache2 restart
+  - データベースとの接続（MySQL編）
+    + MySQLサーバのセットアップ
+      パスワード
+      gnDwPsFVM5kMU (root)
+      diiNv2bid4aTI (railsdemo)
+      % sudo -s
+      % echo "gnDwPsFVM5kMU" > /root/mysql_root_password
+      % echo "diiNv2bid4aTI" > /root/mysql_railsdemo_password
+      % chmod 400 /root/mysql_*_password
+      % exit
+      MySQLを初期化します。
+      % sudo mysql_install_db
+    + データベースおよびユーザーの作成
+      mysql -u root コマンドでMySQLモニターを開きます。
+      $ show databases;
+    
+      rootユーザーのパスワードを変更します。
+      $ SET PASSWORD FOR 'root'@'localhost' = PASSWORD('gnDwPsFVM5kMU');
+    
+      railsdemo_productionデータベースを作り、railsdemoユーザーに全権を与えます。
+      $ CREATE DATABASE railsdemo_production DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+      $ GRANT ALL ON railsdemo_production.* TO 'railsdemo'@'localhost';
+      $ SET PASSWORD FOR 'railsdemo'@'localhost' = PASSWORD('diiNv2bid4aTI');               
+
+      MySQLモニターを抜けます。
+      $ quit
+    + データベース接続の切り替え
+      % sudo su - rails
+      % cd railsdemo
+
+      エディタで Gemfile を開き、
+      gem 'sqlite3'
+
+      を
+
+      gem 'mysql2'
+      に変更します。そして、Bundlerでmysql2ライブラリをインストールします。
+      % bundle install
+
+      config/database.yml
+      production:
+       adapter: mysql2
+       database: railsdemo_production
+       username: railsdemo
+       password: diiNv2bid4aTI
+       host: 127.0.0.1
+       encoding: utf8
+    
+      % RAILS_ENV=production rake db:schema:load
+      % RAILS_ENV=production rake db:seed
+    + Railsアプリケーションの再起動
+      % touch tmp/restart.txt
+    + 日本語対応
+      [Amazon RDS 文字化けと格闘]
+      mysql> alter railsdemo_production mydb default character set utf8;
+      mysql> show variables like '%character%';
+
+      railsユーザーになってサイドDB migrateb% RAILS_ENV=production rake db:schema:load
+      % RAILS_ENV=production rake db:seed
+  - Gitレポジトリの作成
+    + Gitレポジトリの作成
+      まずリモートマシンにgitユーザーを作成します。
+
+      $ sudo useradd -m -d /var/git git
+      $ sudo passwd git
+      $ sudo chmod 750 /var/git
+
+      railsユーザーをgitグループに加えます。/var/gitディレクトリの読み取り権限が与えられることになります。
+      $ sudo gpasswd -a rails git
+
+      ローカルマシンからあなたのSSH公開鍵をgitユーザーのホームディレクトリに転送します。
+      % scp -i k2works.pm .ssh/id_rsa.pub ubuntu@:54.248.228.199:~
+
+      SSH公開鍵をauthorized_keysに加えます。
+      $ mkdir -m 700 .ssh
+      $ cat id_rsa.pub >> .ssh/authorized_keys
+      $ chmod 600 .ssh/authorized_keys
+      $ rm id_rsa.pub
+
+      空のレポジトリ asagao.git を作成します。
+      $ mkdir railsdemo.git
+      $ git init --bare --shared=0640 railsdemo.git
+    + レポジトリにソースコードを登録
+      ローカルマシンのrailsdemoディレクトリに移動して、以下のコマンドを順に実行します。
+
+      % git init
+      % git add .
+      % git commit -m 'initial commit'
+      % git remote add origin git@railsdemo.k2-works.net:railsdemo.git
+      % git push origin master           
+  - Capistranoによるデプロイ
+    + 本番・ステージング環境の設定
+      [Capistrano 複数環境へのデプロイ]
+      - staging/production環境のデータベースの準備
+
+      - Gemfileの追加
+
+      - Capistranoの設定フィルを生成
+
+      - Capistrano共通のデプロイ設定
+
+      - Capistrano Staging環境のデプロイ設定
+
+      - Capistrano Producion環境のデプロイ設定
+
+      - メンテナンス画面の設定
+
+      - デプロイ前のチェックリスト
+
+      - デプロイ手順
+
+      - Apachバーチャルホストを設定
+    + SSH公開鍵の設置
+               $ sudo mkdir --mode=700 /var/rails/.ssh
+               $ sudo cp /home/k2works/.ssh/authorized_keys /var/rails/.ssh/
+               $ sudo chown -R rails:rails /var/rails/.ssh
+
+               ローカルマシンからrailsユーザーとしてSSHで接続し、パスワードを尋ねられないことを確認します。
+               % ssh rails@railsdemo.k2-works.net
+    + Capistranoの準備
+               % gem install capistrano
+               % capify .
+
+               config/deploy.rb
+
+               require 'bundler/capistrano'
+               load 'deploy/assets'
+
+               set :application, "railsdemo"
+               set :deploy_to, "/var/rails/railsdemo"
+               set :user, "rails"
+               set :use_sudo, false
+
+               set :local_repository, "git@demo.k2-works.net:railsdemo.git"
+               set :repository, "/var/git/railsdemo.git"
+               set :branch, "master"
+               set :scm, :git
+               set :deploy_via, :remote_cache
+
+               set :normalize_asset_timestamps, false
+               set :keep_releases, 3
+
+               role :web, "demo.k2-works.net"
+               role :app, "demo.k2-works.net"
+               role :db,  "demo.k2-works.net", :primary => true
+
+               after "deploy:update", :roles => :app do
+                 run "cp #{shared_path}/config/database.yml #{release_path}/config/"
+               end
+
+               after "deploy:update", "deploy:cleanup"
+
+               namespace :deploy do
+                 desc "Restarts your application."
+                 task :restart, :roles => :app do
+                   run "touch #{current_path}/tmp/restart.txt"
+                 end
+               end
+
+              次のコマンドを実行します
+               % cap deploy:setup
+
+               エディタで Gemfile を開き、gem 'sqlite3' の部分を gem 'mysql2' あるいは gem 'pg' と書き換えます。また、
+
+               # gem 'therubyracer'
+               を次のように書き換えます。
+
+               gem 'therubyracer', :platform => :ruby
+
+               $bundle install
+
+               railsユーザーでリモートホストにログインして以下のコマンドを順に実行します。
+               $ cd /var/rails/railsdemo/shared
+               $ mkdir config
+               MySQLを利用している場合は、新規ファイル /var/rails/railsdemo/shared/config/database.yml を次の内容で作成します。
+
+               production:
+                 adapter: mysql2
+                 database: railsdemo_production
+                 username: railsdemo
+                 password: diiNv2bid4aTI
+                 host: railsdemo.ccebcwxdebti.ap-northeast-1.rds.amazonaws.com
+                 encoding: utf8
+
+               $ cap deploy
+    + 仮想ホストの設定変更
+              sudo権限のあるユーザー(kuroda)でリモートホストにログインして、/etc/httpd/sites-available/railsdemo を次のように修正します（要sudo）。
+              <VirtualHost *:80>
+              ServerName asagao.oiax.jp
+              DocumentRoot /var/rails/railsdemo/current/public
+              RackEnv production
+              <Directory /var/rails/railsdemo/current/public>
+              AllowOverride all
+              Options -MultiViews
+              </Directory>
+              </VirtualHost>
+              パスの /public の前に current を追加しています（2カ所）。
+
+              そして、Apacheをリロードします。
+               $ sudo service apache2 reload # Ubuntu Server 12.04/10.04 LTS の場合               
+
+               [Rails本番環境構築ガイド]: http://www.oiax.jp/rails3book/deploy.html
+               [知っておきたいApacheの基礎知識 その1]: http://gihyo.jp/admin/serial/01/unix/0005
+               [Amazon RDS 文字化けと格闘]: http://www.teps4545.com/2010/01/amazon-rds.html
+               [Capistrano 複数環境へのデプロイ]: http://morizyun.github.io/blog/capistrano-localhost-multi-deploy/
+
