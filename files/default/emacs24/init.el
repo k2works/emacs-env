@@ -18,6 +18,31 @@
 (add-to-list 'exec-path "/usr/local/bin")
 (add-to-list 'exec-path "~/bin")
 
+;; load-path を追加する関数を定義
+(defun add-to-load-path (&rest paths)
+(let (path)
+(dolist (path paths paths)
+(let ((default-directory
+  (expand-file-name (concat user-emacs-directory path))))
+  (add-to-list 'load-path default-directory)
+  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+  (normal-top-level-add-subdirs-to-load-path))))))
+
+;; 引数のディレクトリとそのサブディレクトリをload-pathに追加
+(add-to-load-path "elisp" "conf" "public_repos")
+
+;; ターミナル以外はツールバー、スクロールバーを非表示
+(when window-system
+  ;; tool-barを非表示
+  (tool-bar-mode 0)
+  ;; scroll-barを非表示
+  (scroll-bar-mode 0))
+
+  ;; CocoaEmacs以外はメニューバーを非表示
+  (unless (eq window-system 'ns)
+  ;; menu-barを非表示
+  (menu-bar-mode 0))
+
 ;; 文字コードを指定する
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
@@ -82,7 +107,9 @@
 ;; 表示テーマの設定
 (when (require 'color-theme nil t)
   ;; テーマを読み込むための設定
-  (color-theme-initialize))
+  (color-theme-initialize)
+  ;; テーマhoberに変更する
+  (color-theme-hober))
 
 ;; フォントの設定
 (when (eq window-system 'ns)
@@ -193,3 +220,26 @@
 
 ;; emacs-lisp-modeのフックをセット
 (add-hook 'emacs-lisp-mode-hook 'elisp-mode-hooks)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 拡張                          ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; auto-installの設定
+(when (require 'auto-install nil t)
+  ;; インストールディレクトリを設定する 初期値は ~/.emacs.d/auto-install/
+  (setq auto-install-directory "~/.emacs.d/elisp/")
+  ;; EmacsWikiに登録されているelisp の名前を取得する
+  (auto-install-update-emacswiki-package-name t)
+  ;; 必要であればプロキシの設定を行う
+  ;; (setq url-proxy-services '(("http" . "localhost:8339")))
+  ;; install-elisp の関数を利用可能にする
+  (auto-install-compatibility-setup))
+
+;; package.elの設定
+(when (require 'package nil t)
+;; パッケージリポジトリにMarmaladeと開発者運営のELPAを追加
+(add-to-list 'package-archives
+  '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
+  ;; インストールしたパッケージにロードパスを通して読み込む
+  (package-initialize))
