@@ -83,4 +83,5 @@ bash "install cask" do
   code <<-EOC
   curl -fsSkL https://raw.github.com/cask/cask/master/go | python
   EOC
+  creates "/home/vagrant/.cask"
 end

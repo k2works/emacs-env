@@ -106,7 +106,7 @@
 (set-face-background 'region "darkgreen")
 ;; 表示テーマの設定
 
-;;(load-theme 'deeper-blue t)
+(load-theme 'tango-dark t)
 
 ;; フォントの設定
 (when (eq window-system 'ns)
@@ -242,8 +242,13 @@
   (package-initialize))
 
 ;; Caskの設定
+(when (eq system-type 'gnu/linux)
+(require 'cask "~/.cask/cask.el")
+(cask-initialize))
+
 (when (require 'cask nil t)
-  (cask-initialize))
+(cask-initialize))
+
 (when (require 'pallet nil t)
   (pallet-mode t))
 
@@ -330,7 +335,7 @@ ad-do-it))
 ;; ac-helm
 (when (require 'ac-helm nil t)  ;; Not necessary if using ELPA package
   (global-set-key (kbd "C-:") 'ac-complete-with-helm)
-  (define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm))  
+  (define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm))
 
 ;; 検索と置換の拡張
 ;; color-moccurの設定
