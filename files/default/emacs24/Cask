@@ -65,3 +65,5 @@
 (depends-on "undohist")
 (depends-on "undo-tree")
 (depends-on "point-undo")
+
+(depends-on "elscreen")
