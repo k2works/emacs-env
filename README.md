@@ -273,9 +273,29 @@ _init.el_
 | nxml-mode-hook  | nxml-modeを起動した後に実行される  |
 
 ## <a name="4">拡張</a>
+### Elispインストール
+#### 拡張機能の自動インストール
+#### Emacs Lisp Package Archive(ELPA)
+### Caskインストール
+```
+$ brew install cask
+$ cd ~/.emacs.d
+$ cask init
+```
+### 統一したインタフェース
+### 入力の効率化
+### 検索と置換の拡張
+### さまざまな履歴管理
+### ウィンドウ管理
+### メモ・情報整理
+### 特殊な範囲の編集
 
 # 参照
 + [emacs](http://cookbooks.opscode.com/cookbooks/emacs)
 + [emacs24](http://cookbooks.opscode.com/cookbooks/emacs24)
 + [Homebrew で Cocoa Emacs 24.3 を入れた](http://kawachodev.hatenablog.jp/entry/homebrew-cocoa-emacs-24.3)
 + [color-theme](http://savannah.nongnu.org/projects/color-theme)
++ [cask](https://github.com/cask/cask)
++ [pallet](https://github.com/rdallasgray/pallet)
++ [Emacs-helm](https://github.com/emacs-helm/helm)
++ [Helm をストレスなく使う](http://d.hatena.ne.jp/a_bicky/20140104/1388822688a)

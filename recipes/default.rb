@@ -14,7 +14,7 @@ directory "/home/vagrant/.emacs.d" do
 end
 
 if File.exists?("/home/vagrant/.emacs.d")
-  %w{conf elisp elpa public_repos etc info other backups}.each do |dir|
+  %w{conf elisp elpa public_repos etc info other backups snippets}.each do |dir|
     directory "/home/vagrant/.emacs.d/#{dir}" do
       owner  "vagrant"
       group  "vagrant"
@@ -23,11 +23,13 @@ if File.exists?("/home/vagrant/.emacs.d")
     end
   end
 
-  cookbook_file "/home/vagrant/.emacs.d/init.el" do
-    source "emacs24/init.el"
-    owner  "vagrant"
-    group  "vagrant"
-    mode 00644
+  %w{init.el Cask}.each do |file|
+    cookbook_file "/home/vagrant/.emacs.d/#{file}" do
+      source "emacs24/#{file}"
+      owner  "vagrant"
+      group  "vagrant"
+      mode 00644
+    end
   end
 
   remote_directory "/home/vagrant/.emacs.d/elisp/color-theme-6.6.0" do
@@ -55,7 +57,7 @@ if File.exists?("/home/vagrant/.emacs.d")
 
     bash "change mode" do
       code <<-EOC
-      chmod -R 755 #{file_path}
+        chmod -R 755 #{file_path}
       EOC
     end
   end
@@ -68,5 +70,17 @@ if File.exists?("/home/vagrant/.emacs.d")
       mode 00644
     end
   end
+end
 
+%w{git}.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+bash "install cask" do
+  only_if 'which git'
+  code <<-EOC
+  curl -fsSkL https://raw.github.com/cask/cask/master/go | python
+  EOC
 end
