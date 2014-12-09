@@ -61,3 +61,7 @@
 
 (depends-on "color-moccur")
 (depends-on "wgrep")
+
+(depends-on "undohist")
+(depends-on "undo-tree")
+(depends-on "point-undo")
