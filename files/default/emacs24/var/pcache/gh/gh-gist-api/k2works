@@ -1,0 +1,280 @@
+;; Object gh/gh-gist-api/k2works
+;; EIEIO PERSISTENT OBJECT
+(gh-cache "gh/gh-gist-api/k2works"
+  :file "k2works"
+  :version "gh-0.2"
+  :entries #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8 data (("/users/k2works/gists" "GET" "518961b9e53cab492b8a913ae8ba7382d4306545") [object gh-cache-entry "gh-cache-entry" 1418121332.92638 nil ([object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 277 "https://gist.githubusercontent.com/k2works/6a9d1a8deafc77c7fc12/raw/324472aacff933a0e9737ccd41a72237f8c7a5c2/gistfile1.md" nil]) t "Vagrantでknife soloをする準備" "2014-12-08T04:46:46Z" "2014-12-08T05:40:12Z" "https://gist.github.com/6a9d1a8deafc77c7fc12.git" "https://gist.github.com/6a9d1a8deafc77c7fc12.git" "https://gist.github.com/6a9d1a8deafc77c7fc12" 0 unbound "6a9d1a8deafc77c7fc12" "https://api.github.com/gists/6a9d1a8deafc77c7fc12" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 46 "https://gist.githubusercontent.com/k2works/e884c32406899544bcd8/raw/c030d550cd37c64930cd40907f0b1e8d526c7e64/gistfile1.md" nil]) t "早くgemをインストールする" "2014-11-29T01:43:18Z" "2014-12-04T11:09:46Z" "https://gist.github.com/e884c32406899544bcd8.git" "https://gist.github.com/e884c32406899544bcd8.git" "https://gist.github.com/e884c32406899544bcd8" 1 unbound "e884c32406899544bcd8" "https://api.github.com/gists/e884c32406899544bcd8" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 213 "https://gist.githubusercontent.com/k2works/fb0d175f7161c84b53d2/raw/e376b6242fa4799b032f091a2ab17f5a6fb4755e/gistfile1.md" nil]) t "DBの文字コードまわり" "2014-11-27T07:25:58Z" "2014-11-27T08:25:15Z" "https://gist.github.com/fb0d175f7161c84b53d2.git" "https://gist.github.com/fb0d175f7161c84b53d2.git" "https://gist.github.com/fb0d175f7161c84b53d2" 0 unbound "fb0d175f7161c84b53d2" "https://api.github.com/gists/fb0d175f7161c84b53d2" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 223 "https://gist.githubusercontent.com/k2works/1afd6ebadcd44dec46ff/raw/be32d92f4210a178a5c59d1a84d0d3f239529e44/gistfile1.md" "OSX
+```
+$ sudo rm -rf /opt/chefdk
+$ sudo pkgutil --forget com.getchef.pkg.chefdk
+$ find /usr/bin -lname '/opt/chefdk/*' -delete
+```
+[Install the Chef DK](https://docs.getchef.com/install_dk.html#uninstall-the-chef-dk-title)"]) t "ChefDKのアンインストール" "2014-11-25T01:45:16Z" "2014-11-25T01:45:17Z" "https://gist.github.com/1afd6ebadcd44dec46ff.git" "https://gist.github.com/1afd6ebadcd44dec46ff.git" "https://gist.github.com/1afd6ebadcd44dec46ff" 0 unbound "1afd6ebadcd44dec46ff" "https://api.github.com/gists/1afd6ebadcd44dec46ff" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 277 "https://gist.githubusercontent.com/k2works/286726223cbfea87efe7/raw/dffb988867d5b3b701ad795a1cbee1b1aeea04b4/gistfile1.md" nil]) t "Vagrantのアンインストール" "2014-11-25T01:43:23Z" "2014-11-25T01:45:44Z" "https://gist.github.com/286726223cbfea87efe7.git" "https://gist.github.com/286726223cbfea87efe7.git" "https://gist.github.com/286726223cbfea87efe7" 0 unbound "286726223cbfea87efe7" "https://api.github.com/gists/286726223cbfea87efe7" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 1233 "https://gist.githubusercontent.com/k2works/6a816c14d203b3ff0258/raw/c51b5f8115e592555ebdb1053a526383fb22beb1/gistfile1.md" nil]) t "ECインスタンス上のスワップファイルを削除する" "2014-11-21T06:52:16Z" "2014-11-21T07:19:21Z" "https://gist.github.com/6a816c14d203b3ff0258.git" "https://gist.github.com/6a816c14d203b3ff0258.git" "https://gist.github.com/6a816c14d203b3ff0258" 0 unbound "6a816c14d203b3ff0258" "https://api.github.com/gists/6a816c14d203b3ff0258" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 264 "https://gist.githubusercontent.com/k2works/f704a3c8b8b79e2dacf0/raw/f638b3ade49ce033d8c1ec8a27294714048aff05/gistfile1.md" nil]) t "Railsアプリケーションのルート定義を確認する" "2014-11-19T01:51:01Z" "2014-11-19T03:02:44Z" "https://gist.github.com/f704a3c8b8b79e2dacf0.git" "https://gist.github.com/f704a3c8b8b79e2dacf0.git" "https://gist.github.com/f704a3c8b8b79e2dacf0" 0 unbound "f704a3c8b8b79e2dacf0" "https://api.github.com/gists/f704a3c8b8b79e2dacf0" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "rubyでHTTPワンライナー" 28 "https://gist.githubusercontent.com/k2works/7c86e594012621f49f96/raw/f181ac40df9b956ce39157499b835df7674bfd77/ruby%E3%81%A7HTTP%E3%83%AF%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%8A%E3%83%BC" nil]) t "" "2014-10-02T07:34:59Z" "2014-10-02T07:35:00Z" "https://gist.github.com/7c86e594012621f49f96.git" "https://gist.github.com/7c86e594012621f49f96.git" "https://gist.github.com/7c86e594012621f49f96" 0 unbound "7c86e594012621f49f96" "https://api.github.com/gists/7c86e594012621f49f96" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 75 "https://gist.githubusercontent.com/k2works/d4b7536094756b921e19/raw/042b9b571f0950bb45643f4557d4a3a396d5340b/gistfile1.md" "http://www.tecmint.com/install-google-chrome-on-redhat-centos-fedora-linux/"]) :json-false "CentOSにGoogle Chromeをインストールする" "2014-09-04T02:57:14Z" "2014-09-07T02:17:44Z" "https://gist.github.com/d4b7536094756b921e19.git" "https://gist.github.com/d4b7536094756b921e19.git" "https://gist.github.com/d4b7536094756b921e19" 0 unbound "d4b7536094756b921e19" "https://api.github.com/gists/d4b7536094756b921e19" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 521 "https://gist.githubusercontent.com/k2works/11298ec2222a2e5ebf1a/raw/7aea87a38c39b2ba6839aab6cb21292118eb78a3/gistfile1.md" nil]) :json-false "UbuntuVagrantをGUIで立ち上げる(Ubuntu)" "2014-09-04T02:35:05Z" "2014-09-07T02:18:04Z" "https://gist.github.com/11298ec2222a2e5ebf1a.git" "https://gist.github.com/11298ec2222a2e5ebf1a.git" "https://gist.github.com/11298ec2222a2e5ebf1a" 0 unbound "11298ec2222a2e5ebf1a" "https://api.github.com/gists/11298ec2222a2e5ebf1a" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 622 "https://gist.githubusercontent.com/k2works/03cc2ac119979f8ff037/raw/1c6e76e178ecfc1d578f91c9a50d160687088b12/gistfile1.md" nil]) :json-false "Vagrant の VM で GUI (X11) のアプリケーションを使う" "2014-09-04T01:44:57Z" "2014-09-04T01:44:58Z" "https://gist.github.com/03cc2ac119979f8ff037.git" "https://gist.github.com/03cc2ac119979f8ff037.git" "https://gist.github.com/03cc2ac119979f8ff037" 0 unbound "03cc2ac119979f8ff037" "https://api.github.com/gists/03cc2ac119979f8ff037" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 496 "https://gist.githubusercontent.com/k2works/0ac83cfd1143d1444480/raw/68dc1e03d1d65986680261366075396b6d7511da/gistfile1.md" nil]) :json-false "" "2014-07-19T01:31:12Z" "2014-07-19T01:31:57Z" "https://gist.github.com/0ac83cfd1143d1444480.git" "https://gist.github.com/0ac83cfd1143d1444480.git" "https://gist.github.com/0ac83cfd1143d1444480" 0 unbound "0ac83cfd1143d1444480" "https://api.github.com/gists/0ac83cfd1143d1444480" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.md" 1148 "https://gist.githubusercontent.com/k2works/ac8943ad1d6de6994ddf/raw/9a6d4f2c4db09ca993578f1d83c7b8864f9f1a24/gistfile1.md" "1. azureのVMへのログイン`$ ssh azureuser@k2works.cloudapp.ne`
+1. [Windows Azure コマンドライン ツール を使ってみる](http://blogs.msdn.com/b/chack/archive/2012/11/26/how-to-use-windows-azure-command-line-tool.aspx)
+1. VMのLinuxにコマンドラインツールをインストールした際にうまく動かない場合[run npm command gives error \"/usr/bin/env: node: No such file or directory\" ](https://github.com/joyent/node/issues/3911)
+1. Dockerのアップデート[apt-get upgrade in plain Ubuntu precise image fails](https://github.com/dotcloud/docker/issues/1724)
+1. コマンドラインツール[参照](http://azure.microsoft.com/ja-jp/documentation/articles/xplat-cli/)
+1. [azure-uninstall](http://blogs.msdn.com/b/windowsazurej/archive/2012/07/10/using-windows-azure-with-the-command-line-tools-for-mac-and-linux.aspx)
+1. [MSOpenTech/azure-sdk-tools-xplat](https://github.com/MSOpenTech/azure-sdk-tools-xplat/tree/docker)
+```
+$ git clone -b docker https://github.com/MSOpenTech/azure-sdk-tools-xplat.git azure-sdk-tools-xplat-docker
+$ cd azure-sdk-tools-xplat-docker
+$ npm install
+```
+うまくうごかない"]) :json-false "Azureメモ" "2014-06-27T03:05:53Z" "2014-07-19T01:40:55Z" "https://gist.github.com/ac8943ad1d6de6994ddf.git" "https://gist.github.com/ac8943ad1d6de6994ddf.git" "https://gist.github.com/ac8943ad1d6de6994ddf" 0 unbound "ac8943ad1d6de6994ddf" "https://api.github.com/gists/ac8943ad1d6de6994ddf" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "cls_差異" 5491 "https://gist.githubusercontent.com/k2works/c3231f3dde4fddd61f12/raw/a8bd3a32f28b331d340363fb0bb593dee4f79034/cls_%E5%B7%AE%E7%95%B0" "Private My_range As String
+Private My_sheet As String
+Private My_from As String
+
+Public Property Let 対象レンジ(range As String)
+    My_range = range
+End Property
+
+Public Property Let 対象シート(sheet As String)
+    My_sheet = sheet
+End Property
+ 
+Public Property Get 対象範囲() As String
+ 
+    対象範囲 = \"[\" & My_sheet & My_range & \"]\"
+ 
+End Property
+
+Private Sub Class_Initialize()
+
+End Sub
+
+Public Function 差異抽出() As Boolean
+    Dim 残在庫 As Double
+    Dim 比較元一覧 As New cls_DBマネージャー
+    Dim 比較先一覧 As New cls_DBマネージャー
+    Dim 比較先 As New cls_DBマネージャー
+    Dim 比較元 As New cls_DBマネージャー
+    Dim 比較元だけにある As New cls_DBマネージャー
+    Dim 比較先だけにある As New cls_DBマネージャー
+    Dim 差異あり比較元 As New cls_DBマネージャー
+    Dim 差異あり比較先 As New cls_DBマネージャー
+    Dim i As Integer
+    Dim k As Integer
+    Dim j As Integer
+    
+    '初期化
+'    Worksheets(\"比較先だけにある\").Cells.Select
+'    Selection.ClearContents
+'
+'    Worksheets(\"比較先だけにある\").Cells.Select
+'    Selection.ClearContents
+'
+'    Worksheets(\"差異あり\").Cells.Select
+'    Selection.ClearContents
+    
+    Call 比較元シート一覧データ取得(比較元一覧)
+    k = 1
+    l = 1
+    i = 2
+    j = 2
+    Do Until 比較元一覧.rs.EOF = True
+        Call 比較先シート一覧データを注文番号で取得(比較先, 比較元一覧.rs!受注番号)
+        '見出し行を書き出し
+        For k = 1 To 比較元一覧.rs.Fields.Count
+            Worksheets(\"比較元だけにある\").Cells(1, k) = 比較元一覧.rs.Fields(k - 1).Name
+        Next
+        
+        For k = 1 To 比較元一覧.rs.Fields.Count
+            Worksheets(\"差異あり\").Cells(1, k) = 比較元一覧.rs.Fields(k - 1).Name
+        Next
+        k = k + 1
+        For l = 1 To 比較先.rs.Fields.Count
+            Worksheets(\"差異あり\").Cells(1, k) = 比較先.rs.Fields(l - 1).Name
+            k = k + 1
+        Next
+        If 比較先.rs.RecordCount = 0 Then
+            Debug.Print \"比較元:\" & 比較元一覧.rs!受注番号
+            Call 比較元シート一覧データを注文番号で取得(比較元だけにある, 比較元一覧.rs!受注番号)
+
+            renge = \"A\" & i
+            Worksheets(\"比較元だけにある\").range(renge).CopyFromRecordset 比較元だけにある.rs
+            i = i + 1
+        Else
+            diff = 比較元一覧.rs!売上合計 - 比較先.rs!商品売上
+            If diff > 0 Then
+                Debug.Print \"差異あり:\" & 比較元一覧.rs!受注番号
+                Call 比較元シート一覧データを注文番号で取得(差異あり比較元, 比較元一覧.rs!受注番号)
+                renge1 = \"A\" & j
+                Worksheets(\"差異あり\").range(renge1).CopyFromRecordset 差異あり比較元.rs
+                Call 比較先シート一覧データを注文番号で取得(差異あり比較先, 比較元一覧.rs!受注番号)
+                renge2 = \"T\" & j
+                Worksheets(\"差異あり\").range(renge2).CopyFromRecordset 差異あり比較先.rs
+                j = j + 1
+            End If
+        End If
+        
+        比較元一覧.rs.MoveNext
+    Loop
+    
+    Call 比較先シート一覧データ取得(比較先一覧)
+    k = 1
+    i = 2
+     Do Until 比較先一覧.rs.EOF = True
+        Call 比較元シート一覧データを注文番号で取得(比較元, 比較先一覧.rs!注文番号)
+        '見出し行を書き出し
+        For k = 1 To 比較先一覧.rs.Fields.Count
+            Worksheets(\"比較先だけにある\").Cells(1, k) = 比較先一覧.rs.Fields(k - 1).Name
+        Next
+        If 比較元.rs.RecordCount = 0 Then
+            Debug.Print \"比較先:\" & 比較先一覧.rs!注文番号
+            Call 比較先シート一覧データを注文番号で取得(比較先だけにある, 比較先一覧.rs!注文番号)
+            renge = \"A\" & i
+            Worksheets(\"比較先だけにある\").range(renge).CopyFromRecordset 比較先だけにある.rs
+            i = i + 1
+        End If
+        比較先一覧.rs.MoveNext
+    Loop
+End Function
+
+Private Sub 比較元シート一覧データ取得(比較元一覧 As cls_DBマネージャー)
+    Dim sql As String
+    sql = \"SELECT 出荷日,ECサイト,取込番号,受注番号,支払方法,売上合計,仕入合計,粗利合計,手数料,送料,利用ポイント,請求金額,売上総合計,検証用合計,出荷年年,出荷月,過不足調整金,クーポン額 FROM [比較元$]\"
+    
+    比較元一覧.ExecSQL (sql)
+End Sub
+
+Private Sub 比較先シート一覧データ取得(比較先一覧 As cls_DBマネージャー)
+    Dim sql As String
+    sql = \"SELECT * FROM [比較先$]\"
+    比較先一覧.ExecSQL (sql)
+End Sub
+
+Private Sub 比較先シート一覧データを注文番号で取得(比較先 As cls_DBマネージャー, 注文番号)
+    Dim sql As String
+    sql = \"SELECT * FROM [比較先$] WHERE 注文番号 = \" & \"'\" & 注文番号 & \"'\"
+    比較先.ExecSQL (sql)
+End Sub
+
+Private Sub 比較元シート一覧データを注文番号で取得(比較元 As cls_DBマネージャー, 注文番号)
+    Dim sql As String
+    sql = \"SELECT * FROM [比較元$] WHERE 受注番号 = \" & \"'\" & 注文番号 & \"'\"
+    比較元.ExecSQL (sql)
+End Sub
+"] [object gh-gist-gist-file "gh-gist-gist-file" "cls_DBマネージャ" 2259 "https://gist.githubusercontent.com/k2works/c3231f3dde4fddd61f12/raw/e813be228c7f7335d0e3d17fe740bb94eec474f3/cls_DB%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%A3" "'------------------------------------------------------------
+' DBマネージャー
+' 2013/03/26 K.Kakigi
+'------------------------------------------------------------
+Private My_Cn As Object
+Private My_Rs As Object
+Private My_Sql As String
+ 
+Public Property Let sql(ByVal sql As String)
+ 
+    My_Sql = sql
+ 
+End Property
+ 
+Public Property Get sql() As String
+ 
+    sql = My_Sql
+ 
+End Property
+ 
+Public Property Get cn() As Object
+ 
+    Set cn = My_Cn
+ 
+End Property
+ 
+ 
+Public Property Get rs() As Object
+ 
+    Set rs = My_Rs
+ 
+End Property
+ 
+ 
+Private Sub Class_Initialize()
+On Error GoTo Obj_Rls
+    
+    '変数定義
+    Dim sPath As String
+  
+    'コネクションオブジェクト作成
+    Set My_Cn = CreateObject(\"ADODB.Connection\")
+    'レコードセットオブジェクト作成
+    Set My_Rs = CreateObject(\"ADODB.Recordset\")
+  
+    'Excelパス
+    sPath = ThisWorkbook.Path & \"\\\" & ThisWorkbook.Name
+  
+    'ファイルの存在確認
+    If Dir(sPath) = \"\" Then
+        MsgBox \"指定されたExcelが存在しません\"
+        GoTo Obj_Rls
+    End If
+  
+    '-------------------
+    ' 対象Excelオープン
+    '-------------------
+    With My_Cn
+        .Provider = \"MSDASQL\"
+        .ConnectionString = \"Driver={Microsoft Excel Driver (*.xls)};\" & _
+                            \"DBQ=\" & sPath & \"; ReadOnly=False;\" & _
+                            \"Extended Properties=\"\" Excel 8.0; HDR=YES;\"\"\"
+        .Open
+        .CursorLocation = 3 ' クライアントサイドカーソルに変更
+    End With
+    
+Exit Sub
+    
+Obj_Rls:
+    'エラー確認
+    If Err.Number <> 0 Then
+        MsgBox Err.Description
+    End If
+    '開放
+    Me.clear
+    MsgBox \"処理完了\"
+    
+End Sub
+ 
+Private Sub Class_Terminate()
+ 
+End Sub
+ 
+Public Sub clear()
+    Set My_Cmd = Nothing
+    Set My_Rs = Nothing
+    Set My_Cn = Nothing
+End Sub
+ 
+Public Sub ExecSQL(sql As String)
+    My_Sql = sql
+    Set My_Rs = My_Cn.Execute(sql)
+End Sub
+ 
+Public Sub BeginTrans()
+    cn.BeginTrans
+End Sub
+ 
+Public Sub CommitTrans()
+    cn.CommitTrans
+End Sub
+ 
+Public Sub RollbackTrans()
+    cn.RollbackTrans
+    
+    MsgBox \"以下のエラーが発生したためロールバックしました。\" & vbCrLf & _
+        Err.Description, vbCritical
+End Sub
+
+
+"] [object gh-gist-gist-file "gh-gist-gist-file" "Main" 90 "https://gist.githubusercontent.com/k2works/c3231f3dde4fddd61f12/raw/c0fd99babcf6d4fc864ed574757facccfc419db5/Main" "Sub 差異抽出()
+    Dim 差異 As New cls_差異
+    
+    差異.差異抽出
+End Sub
+
+"]) :json-false "2つのシートから差異を抽出するExcelマクロ
+標準モジュール:Main
+DBマネージャ:cls_DBマネージャ
+差異分析クラス:cls_差異
+の３つから構成されている" "2013-06-26T06:58:46Z" "2013-06-26T06:58:47Z" "https://gist.github.com/c3231f3dde4fddd61f12.git" "https://gist.github.com/c3231f3dde4fddd61f12.git" "https://gist.github.com/c3231f3dde4fddd61f12" 0 unbound "c3231f3dde4fddd61f12" "https://api.github.com/gists/c3231f3dde4fddd61f12" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.vb" 2309 "https://gist.githubusercontent.com/k2works/1f8878bdede27a72778e/raw/52e383230e7e6a8508fc065d27697c12de902c7a/gistfile1.vb" nil]) :json-false "ExcelをSQLのように使うVBAスクリプト
+http://eprostation.jpn.org/code/vba/vba0003.html" "2013-03-22T07:37:06Z" "2013-03-22T07:37:07Z" "https://gist.github.com/1f8878bdede27a72778e.git" "https://gist.github.com/1f8878bdede27a72778e.git" "https://gist.github.com/1f8878bdede27a72778e" 0 unbound "1f8878bdede27a72778e" "https://api.github.com/gists/1f8878bdede27a72778e" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.vb" 7427 "https://gist.githubusercontent.com/k2works/6e2c1bbe5032b2560285/raw/4f2fcc464c9e0debaeee38e5272aa1f9ae7adbfe/gistfile1.vb" nil]) :json-false "VBAサンプルプログラム" "2013-03-21T06:45:54Z" "2013-03-21T06:45:55Z" "https://gist.github.com/6e2c1bbe5032b2560285.git" "https://gist.github.com/6e2c1bbe5032b2560285.git" "https://gist.github.com/6e2c1bbe5032b2560285" 0 unbound "6e2c1bbe5032b2560285" "https://api.github.com/gists/6e2c1bbe5032b2560285" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.vb" 4812 "https://gist.githubusercontent.com/k2works/1919bdbcc83f8435a702/raw/f879e3bb4def20ce21eedb15d746594eecbb9660/gistfile1.vb" nil]) :json-false "VBAサンプルコード集" "2013-02-28T06:10:56Z" "2013-02-28T06:10:57Z" "https://gist.github.com/1919bdbcc83f8435a702.git" "https://gist.github.com/1919bdbcc83f8435a702.git" "https://gist.github.com/1919bdbcc83f8435a702" 0 unbound "1919bdbcc83f8435a702" "https://api.github.com/gists/1919bdbcc83f8435a702" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.vb" 7330 "https://gist.githubusercontent.com/k2works/a58fdf314ab36de05b5c/raw/5a3fd8b53a62b0392bc35f54f3b70e39e5fc210c/gistfile1.vb" nil]) :json-false "VBAサンプルコード集" "2013-02-28T00:20:36Z" "2013-02-28T00:20:37Z" "https://gist.github.com/a58fdf314ab36de05b5c.git" "https://gist.github.com/a58fdf314ab36de05b5c.git" "https://gist.github.com/a58fdf314ab36de05b5c" 0 unbound "a58fdf314ab36de05b5c" "https://api.github.com/gists/a58fdf314ab36de05b5c" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.vb" 336 "https://gist.githubusercontent.com/k2works/a0edb58d4829cc020e22/raw/985f730309385dad2947f25df62738dad0d4b4b2/gistfile1.vb" nil]) :json-false "Accessのピボットテーブルで出力するためのクリックイベント" "2013-02-19T08:46:18Z" "2013-02-19T08:46:46Z" "https://gist.github.com/a0edb58d4829cc020e22.git" "https://gist.github.com/a0edb58d4829cc020e22.git" "https://gist.github.com/a0edb58d4829cc020e22" 0 unbound "a0edb58d4829cc020e22" "https://api.github.com/gists/a0edb58d4829cc020e22" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.txt" 520 "https://gist.githubusercontent.com/k2works/25f904565e8e5575d7e2/raw/edfcb6f45d3d841d6713e9352b5ce67fdfa07a11/gistfile1.txt" nil]) :json-false "shell-mode で bash" "2013-02-08T06:33:34Z" "2013-02-08T06:33:35Z" "https://gist.github.com/25f904565e8e5575d7e2.git" "https://gist.github.com/25f904565e8e5575d7e2.git" "https://gist.github.com/25f904565e8e5575d7e2" 0 unbound "25f904565e8e5575d7e2" "https://api.github.com/gists/25f904565e8e5575d7e2" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.vb" 1448 "https://gist.githubusercontent.com/k2works/d5ade50c466da76661c8/raw/5ea151fd9fbd785fbc9a4659334ecdfaad278f41/gistfile1.vb" nil]) :json-false "VBAデータアクセス実装パターンサンプル" "2013-02-07T07:08:50Z" "2013-02-07T07:08:51Z" "https://gist.github.com/d5ade50c466da76661c8.git" "https://gist.github.com/d5ade50c466da76661c8.git" "https://gist.github.com/d5ade50c466da76661c8" 0 unbound "d5ade50c466da76661c8" "https://api.github.com/gists/d5ade50c466da76661c8" nil nil] [object gh-gist-gist "gh-gist-gist" ([object gh-gist-gist-file "gh-gist-gist-file" "gistfile1.vb" 1762 "https://gist.githubusercontent.com/k2works/c3585c06a41095657259/raw/1fcd51adefc2002383edec45d7e668496c885f49/gistfile1.vb" nil]) :json-false "VBA用データベース管理クラス" "2013-02-07T07:05:39Z" "2013-02-07T07:05:40Z" "https://gist.github.com/c3585c06a41095657259.git" "https://gist.github.com/c3585c06a41095657259.git" "https://gist.github.com/c3585c06a41095657259" 0 unbound "c3585c06a41095657259" "https://api.github.com/gists/c3585c06a41095657259" nil nil]) "\"89f3922b7046f59bbd6e04404cd8560f\"" nil]))
+  :timestamp 1418121483.223812)
