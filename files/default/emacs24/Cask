@@ -67,3 +67,5 @@
 (depends-on "point-undo")
 
 (depends-on "elscreen")
+(depends-on "gist")
+(depends-on "markdown-mode")

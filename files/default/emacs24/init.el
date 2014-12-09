@@ -405,3 +405,6 @@ ad-do-it))
   (if window-system
       (define-key elscreen-map (kbd "C-z") 'iconifiy-or-deiconify-frame)
     (define-key elscreen-map (kbd "C-z") 'suspend-emacs)))
+
+;; メモ・情報整理
+(require 'gist nil t)
