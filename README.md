@@ -299,6 +299,27 @@ $ cask init
 ### メモ・情報整理
 ### 特殊な範囲の編集
 
+### 各種言語の開発環境
+#### HTML
++ HTML5をnxml-modeで編集する
+
+[html5-el](https://github.com/hober/html5-el)
+
+```bash
+$ cd ~/.emacs.d/public_repos/
+$ git clone git@github.com:hober/html5-el.git
+$ cd html5-el/
+$ make relaxng
+```
+
+#### CSS
+
+`M-x install-elisp RET http://www.garshol.priv.no/download/software/css-mode/css-mode.el`
+
+#### Javascript
+
+'Mx package-install RET js2-mode RET'
+
 # 参照
 + [emacs](http://cookbooks.opscode.com/cookbooks/emacs)
 + [emacs24](http://cookbooks.opscode.com/cookbooks/emacs24)
