@@ -18,3 +18,8 @@ bin/*
 
 .kitchen/
 .kitchen.local.yml
+
+files/default/emacs24/auto-save-list
+files/default/emacs24/undohist
+files/default/emacs24/.cask
+wget-log*

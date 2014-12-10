@@ -1,11 +1,12 @@
 俺のEmacs
 ===
 # 目的
+俺のEmacs環境を構築・管理する
+
 # 前提
 | ソフトウェア     | バージョン    | 備考         |
 |:---------------|:-------------|:------------|
 | OS X           |10.8.5        |             |
-| emacs 23 　　　|        |             |
 | emacs 24 　　　|        |             |
 
 # 構成
@@ -238,10 +239,19 @@ _init.el_
 `M-x describe-current-coding-system RET`
 
 #### フレームに関する設定
++ [emacs-neotree](https://github.com/jaypei/emacs-neotree)
+
 #### インデントの設定
 #### 表示・装飾に関する設定
 ##### フェイス
 ##### 表示テーマの設定
++ [emacs-jp/replace-colorthemes](https://github.com/emacs-jp/replace-colorthemes)
+
+```bash
+$ cd ~/.emacs.d
+Kakigi-no-MacBook-Pro@k2works:.emacs.d (wip) $ git clone https://github.com/emacs-jp/replace-colorthemes.git colorthemes
+```
+
 ##### フォントの設定
 #### ハイライトの設定
 #### バックアップとオートセーブ
@@ -273,9 +283,113 @@ _init.el_
 | nxml-mode-hook  | nxml-modeを起動した後に実行される  |
 
 ## <a name="4">拡張</a>
+### Elispインストール
+#### 拡張機能の自動インストール
+#### Emacs Lisp Package Archive(ELPA)
+### Caskインストール
+```
+$ brew install cask
+$ cd ~/.emacs.d
+$ cask init
+```
+### 統一したインタフェース
+### 入力の効率化
+### 検索と置換の拡張
+### さまざまな履歴管理
+### ウィンドウ管理
+### メモ・情報整理
+### 特殊な範囲の編集
+
+### 各種言語の開発環境
+#### HTML
++ HTML5をnxml-modeで編集する
+
+[html5-el](https://github.com/hober/html5-el)
+
+```bash
+$ cd ~/.emacs.d/public_repos/
+$ git clone git@github.com:hober/html5-el.git
+$ cd html5-el/
+$ make relaxng
+```
+
+#### CSS
+
+`M-x install-elisp RET http://www.garshol.priv.no/download/software/css-mode/css-mode.el`
+
+#### Javascript
+
+'M-x package-install RET js2-mode RET'
+
+#### YAML
+
+`M-x package-install RET yaml-mode RET`
+
+#### Ruby
+
+### Flymakeによる文法チェック
+
+#### JsavaScript
+jslをインストールする(Mac)
+```bash
+$ wget http://www.javascriptlint.com/download/jsl-0.3.0-mac.tar.gz
+$ tar xvf jsl-0.3.0-mac.tar.gz
+$ sudo cp ./jsl-0.3.0-mac/jsl /usr/local/bin/jsl
+```
+
+#### ruby
+
+### タグによるコードリーディング
+
+#### ctagsとEmacsの連携
++ [exuberant ctags 日本語対応版](http://hp.vector.co.jp/authors/VA025040/ctags/)
+
+```
+$ wget http://hp.vector.co.jp/authors/VA025040/ctags/downloads/ctags-5.8j2.tar.gz
+$ tar xvf ctags-5.8j2.tar.gz
+$ cd ./ctags-5.8j2
+$ ./configure
+$ make
+$ sudo make install
+```
+
+`M-x package-install RET ctags RET`
+
++ [helm-gtags.el](https://github.com/syohex/emacs-helm-gtags)
+
+### フレームワーク専用拡張機能
+#### Rinari
+`M-x package-install RET rinari RET`  
+
++ [helm-rails](https://github.com/asok/helm-rails)
+
+`M-x package-install RET helm-rails RET`  
+
+### 特殊な文字の入力補助
++ [emoji](https://github.com/imakado/emoji/tree/master)
+
+```bash
+$ cd ~/.emacs.d/public_repos
+$ git clone git@github.com:imakado/emoji.git
+```
+
+### Emacsからデータベースを操作
+
+### シェルの利用
++ カレントファイルへ結果を出力する 'C-u M-!'
++ バッファの内容を標準入力として利用する 'M-|'
+
+### ドキュメント閲覧・検索
++ [https://gist.github.com/shishi/4327137](https://gist.github.com/shishi/4327137)
+
 
 # 参照
++ [Emacs実践入門　～思考を直感的にコード化し、開発を加速する (WEB+DB PRESS plus) ](http://www.amazon.co.jp/Emacs%E5%AE%9F%E8%B7%B5%E5%85%A5%E9%96%80-%EF%BD%9E%E6%80%9D%E8%80%83%E3%82%92%E7%9B%B4%E6%84%9F%E7%9A%84%E3%81%AB%E3%82%B3%E3%83%BC%E3%83%89%E5%8C%96%E3%81%97%E3%80%81%E9%96%8B%E7%99%BA%E3%82%92%E5%8A%A0%E9%80%9F%E3%81%99%E3%82%8B-WEB-DB-PRESS-plus/dp/4774150029)
 + [emacs](http://cookbooks.opscode.com/cookbooks/emacs)
 + [emacs24](http://cookbooks.opscode.com/cookbooks/emacs24)
 + [Homebrew で Cocoa Emacs 24.3 を入れた](http://kawachodev.hatenablog.jp/entry/homebrew-cocoa-emacs-24.3)
 + [color-theme](http://savannah.nongnu.org/projects/color-theme)
++ [cask](https://github.com/cask/cask)
++ [pallet](https://github.com/rdallasgray/pallet)
++ [Emacs-helm](https://github.com/emacs-helm/helm)
++ [Helm をストレスなく使う](http://d.hatena.ne.jp/a_bicky/20140104/1388822688a)
