@@ -318,7 +318,28 @@ $ make relaxng
 
 #### Javascript
 
-'Mx package-install RET js2-mode RET'
+'M-x package-install RET js2-mode RET'
+
+#### YAML
+
+`M-x package-install RET yaml-mode RET`
+
+#### Ruby
+
+### Flymakeによる文法チェック
+
+#### JsavaScript
+jslをインストールする(Mac)
+```bash
+$ wget http://www.javascriptlint.com/download/jsl-0.3.0-mac.tar.gz
+$ tar xvf jsl-0.3.0-mac.tar.gz
+$ sudo cp ./jsl-0.3.0-mac/jsl /usr/local/bin/jsl
+```
+
+#### ruby
+
+### タグによるコールドリーディング
+
 
 # 参照
 + [emacs](http://cookbooks.opscode.com/cookbooks/emacs)
