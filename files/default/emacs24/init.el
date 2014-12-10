@@ -13,6 +13,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 環境変数の設定                                            ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Caskの設定
+(when (eq system-type 'gnu/linux)
+(require 'cask "~/.cask/cask.el")
+(cask-initialize))
+
+(when (require 'cask nil t)
+(cask-initialize))
+
+(when (require 'pallet nil t)
+  (pallet-mode t))
+
 ;;; パスの設定
 (add-to-list 'exec-path "/opt/local/bin")
 (add-to-list 'exec-path "/usr/local/bin")
@@ -90,6 +101,10 @@
 ;; ウィンドウの左に行番号を表示
 (global-linum-mode t)
 
+;; emacs-neotreeの設定
+(when (require 'neotree nil t)
+  (global-set-key (kbd "C-\\") 'neotree-toggle))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; インデントの設定                                          ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -98,6 +113,12 @@
 ;; タブ文字の利用
 (setq-default indent-tabs-mode nil)
 
+;; fold-dwimの設定
+(when (require 'fold-dwim nil t)        
+  (global-set-key (kbd "C-x t t")   'fold-dwim-toggle)
+  (global-set-key (kbd "C-x t h")    'fold-dwim-hide-all)
+  (global-set-key (kbd "C-x t s")  'fold-dwim-show-all))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 表示・装飾に関する設定                                     ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -105,6 +126,13 @@
 ;; リージョンの背景色を変更
 (set-face-background 'region "darkgreen")
 ;; 表示テーマの設定
+;; Please set your themes directory to 'custom-theme-load-path
+(add-to-list 'custom-theme-load-path
+  (file-name-as-directory "colorthemes"))
+
+  ;; load your favorite theme
+  (load-theme 'aalto-dark t t)
+  (enable-theme 'aalto-dark)
 
 (load-theme 'tango-dark t)
 
@@ -217,6 +245,7 @@
 
 ;; emacs-lisp-modeのフックをセット
 (add-hook 'emacs-lisp-mode-hook 'elisp-mode-hooks)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 拡張                          ;;
@@ -240,17 +269,6 @@
   (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
   ;; インストールしたパッケージにロードパスを通して読み込む
   (package-initialize))
-
-;; Caskの設定
-(when (eq system-type 'gnu/linux)
-(require 'cask "~/.cask/cask.el")
-(cask-initialize))
-
-(when (require 'cask nil t)
-(cask-initialize))
-
-(when (require 'pallet nil t)
-  (pallet-mode t))
 
 ;; 統一したインタフェース
 ;; helm
@@ -413,3 +431,18 @@ ad-do-it))
 
 ;; メモ・情報整理
 (require 'gist nil t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("6394ba6170fd0bc9f24794d555fa84676d2bd5e3cfd50b3e270183223f8a6535" "ad97202c92f426a867e83060801938acf035921d5d7e78da3041a999082fb565" "31772cd378fd8267d6427cec2d02d599eee14a1b60e9b2b894dd5487bd30978e" "a3821772b5051fa49cf567af79cc4dabfcfd37a1b9236492ae4724a77f42d70d" default)))
+ '(yas-trigger-key "TAB"))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

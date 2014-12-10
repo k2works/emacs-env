@@ -238,10 +238,19 @@ _init.el_
 `M-x describe-current-coding-system RET`
 
 #### フレームに関する設定
++ [emacs-neotree](https://github.com/jaypei/emacs-neotree)
+
 #### インデントの設定
 #### 表示・装飾に関する設定
 ##### フェイス
 ##### 表示テーマの設定
++ [emacs-jp/replace-colorthemes](https://github.com/emacs-jp/replace-colorthemes)
+
+```bash
+$ cd ~/.emacs.d
+Kakigi-no-MacBook-Pro@k2works:.emacs.d (wip) $ git clone https://github.com/emacs-jp/replace-colorthemes.git colorthemes
+```
+
 ##### フォントの設定
 #### ハイライトの設定
 #### バックアップとオートセーブ
