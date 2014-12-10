@@ -1,11 +1,12 @@
 俺のEmacs
 ===
 # 目的
+俺のEmacs環境を構築・管理する
+
 # 前提
 | ソフトウェア     | バージョン    | 備考         |
 |:---------------|:-------------|:------------|
 | OS X           |10.8.5        |             |
-| emacs 23 　　　|        |             |
 | emacs 24 　　　|        |             |
 
 # 構成
@@ -383,6 +384,7 @@ $ git clone git@github.com:imakado/emoji.git
 
 
 # 参照
++ [Emacs実践入門　～思考を直感的にコード化し、開発を加速する (WEB+DB PRESS plus) ](http://www.amazon.co.jp/Emacs%E5%AE%9F%E8%B7%B5%E5%85%A5%E9%96%80-%EF%BD%9E%E6%80%9D%E8%80%83%E3%82%92%E7%9B%B4%E6%84%9F%E7%9A%84%E3%81%AB%E3%82%B3%E3%83%BC%E3%83%89%E5%8C%96%E3%81%97%E3%80%81%E9%96%8B%E7%99%BA%E3%82%92%E5%8A%A0%E9%80%9F%E3%81%99%E3%82%8B-WEB-DB-PRESS-plus/dp/4774150029)
 + [emacs](http://cookbooks.opscode.com/cookbooks/emacs)
 + [emacs24](http://cookbooks.opscode.com/cookbooks/emacs24)
 + [Homebrew で Cocoa Emacs 24.3 を入れた](http://kawachodev.hatenablog.jp/entry/homebrew-cocoa-emacs-24.3)

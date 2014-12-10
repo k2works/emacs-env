@@ -131,8 +131,8 @@
   (file-name-as-directory "~/.emacs.d/colorthemes"))
 
   ;; load your favorite theme
-  (load-theme 'aalto-dark t t)
-  (enable-theme 'aalto-dark)
+  ;;(load-theme 'aalto-dark t t)
+  ;;(enable-theme 'aalto-dark)
 
 (load-theme 'tango-dark t)
 
@@ -458,14 +458,14 @@ ad-do-it))
 (eval-after-load "rng-loc"
   '(add-to-list 'rng-schema-locating-files "~/.emacs.d/public_repos/html5-el/schemas.xml"))
 
-(require 'whattf-dt)
+(when (require 'whattf-dt nil t)
 ;; nxml-modeの基本設定
 ;; </を入力すると自動的にタグを閉じる
 (setq nxml-slash-auto-complete-flag t)
 ;; M-TABでタグを補完する
 (setq nxml-bind-meta-tab-to-complete-flag t)
 ;; nxml-modeでauto-complete-modeを利用する
-(add-to-list 'ac-modes 'nxml-mode)
+(add-to-list 'ac-modes 'nxml-mode))
 
 ;;cssm-modeの基本設定
 (defun css-mode-hooks ()
@@ -585,7 +585,7 @@ ad-do-it))
 (define-key global-map (kbd "s-r") 'helm-rails-all)
 
 ;; 特殊な文字の入力補助
-(require 'emoji)
+(require 'emoji nil t)
 
 ;; Emacsからデータベースを操作
 ;; SQLサーバへ接続するためのデフォルト情報
