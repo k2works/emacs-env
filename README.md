@@ -338,7 +338,48 @@ $ sudo cp ./jsl-0.3.0-mac/jsl /usr/local/bin/jsl
 
 #### ruby
 
-### タグによるコールドリーディング
+### タグによるコードリーディング
+
+#### ctagsとEmacsの連携
++ [exuberant ctags 日本語対応版](http://hp.vector.co.jp/authors/VA025040/ctags/)
+
+```
+$ wget http://hp.vector.co.jp/authors/VA025040/ctags/downloads/ctags-5.8j2.tar.gz
+$ tar xvf ctags-5.8j2.tar.gz
+$ cd ./ctags-5.8j2
+$ ./configure
+$ make
+$ sudo make install
+```
+
+`M-x package-install RET ctags RET`
+
++ [helm-gtags.el](https://github.com/syohex/emacs-helm-gtags)
+
+### フレームワーク専用拡張機能
+#### Rinari
+`M-x package-install RET rinari RET`  
+
++ [helm-rails](https://github.com/asok/helm-rails)
+
+`M-x package-install RET helm-rails RET`  
+
+### 特殊な文字の入力補助
++ [emoji](https://github.com/imakado/emoji/tree/master)
+
+```bash
+$ cd ~/.emacs.d/public_repos
+$ git clone git@github.com:imakado/emoji.git
+```
+
+### Emacsからデータベースを操作
+
+### シェルの利用
++ カレントファイルへ結果を出力する 'C-u M-!'
++ バッファの内容を標準入力として利用する 'M-|'
+
+### ドキュメント閲覧・検索
++ [https://gist.github.com/shishi/4327137](https://gist.github.com/shishi/4327137)
 
 
 # 参照

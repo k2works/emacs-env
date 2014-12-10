@@ -128,7 +128,7 @@
 ;; 表示テーマの設定
 ;; Please set your themes directory to 'custom-theme-load-path
 (add-to-list 'custom-theme-load-path
-  (file-name-as-directory "colorthemes"))
+  (file-name-as-directory "~/.emacs.d/colorthemes"))
 
   ;; load your favorite theme
   (load-theme 'aalto-dark t t)
@@ -438,7 +438,10 @@ ad-do-it))
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("6394ba6170fd0bc9f24794d555fa84676d2bd5e3cfd50b3e270183223f8a6535" "ad97202c92f426a867e83060801938acf035921d5d7e78da3041a999082fb565" "31772cd378fd8267d6427cec2d02d599eee14a1b60e9b2b894dd5487bd30978e" "a3821772b5051fa49cf567af79cc4dabfcfd37a1b9236492ae4724a77f42d70d" default)))
+    ("f211f8db2328fb031908c9496582e7de2ae8abd5f59a27b4c1218720a7d11803" "89127a6e23df1b1120aa61bd7984f1d5f2747cad1e700614a68bdb7df77189ba" "6394ba6170fd0bc9f24794d555fa84676d2bd5e3cfd50b3e270183223f8a6535" "ad97202c92f426a867e83060801938acf035921d5d7e78da3041a999082fb565" "31772cd378fd8267d6427cec2d02d599eee14a1b60e9b2b894dd5487bd30978e" "a3821772b5051fa49cf567af79cc4dabfcfd37a1b9236492ae4724a77f42d70d" default)))
+ '(helm-gtags-ignore-case helm)
+ '(helm-gtags-path-style (quote relative))
+ '(t-gtags-auto-update t)
  '(yas-trigger-key "TAB"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -547,3 +550,60 @@ ad-do-it))
 
 ;; Ruby用Flymakeの設定
 (add-hook 'ruby-mode-hook 'flymake-ruby-load)
+
+;; タグによるコードリーディング
+;; ctags.elの設定
+(require 'ctags nil t)
+(setq tags-revert-without-query t)
+(global-set-key (kbd "C-M-t") 'ctags-create-or-update-tags-table)
+
+;; helm-gtagsの設定
+;;; Enable helm-gtags-mode
+(add-hook 'ruby-mode-hook 'helm-gtags-mode)
+(add-hook 'js2-mode-hook 'helm-gtags-mode)
+
+;; customize
+
+
+;; key bindings
+(eval-after-load "helm-gtags"
+  '(progn
+     (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+     (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+     (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+     (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+          (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
+
+;; フレームワーク専用拡張機能
+(require 'helm-rails)
+(define-key global-map (kbd "s-t") 'helm-rails-controllers)
+(define-key global-map (kbd "s-y") 'helm-rails-models)
+(define-key global-map (kbd "s-u") 'helm-rails-views)
+(define-key global-map (kbd "s-o") 'helm-rails-specs)
+(define-key global-map (kbd "s-r") 'helm-rails-all)
+
+;; 特殊な文字の入力補助
+(require 'emoji)
+
+;; Emacsからデータベースを操作
+;; SQLサーバへ接続するためのデフォルト情報
+(setq sql-user "root" ; デフォルトユーザー名
+      sql-database "database_name" ; データベース名
+      sql-server "localhost" ; ホスト名
+      sql-product 'mysql) ; データベースの種類
+
+;; シェルの利用
+;; multi-termの設定
+(when (require 'multi-term nil t)
+  ;; 使用するシェルを指定
+  (setq multi-term-program "/bin/bash"))
+
+;; ドキュメント閲覧・検索
+;; キャッシュを作成
+(setq woman-cache-filename "~/.emacs.d/.wmncach.el")
+;; manパスを設定
+(setq woman-manpath '("/usr/share/man"
+                      "/usr/local/share/man"
+                      "/usr/local/share/man/ja"))
