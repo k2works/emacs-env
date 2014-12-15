@@ -380,8 +380,9 @@ $ git clone git@github.com:imakado/emoji.git
 + バッファの内容を標準入力として利用する 'M-|'
 
 ### ドキュメント閲覧・検索
-+ [https://gist.github.com/shishi/4327137](https://gist.github.com/shishi/4327137)
 
+### Init-loader適用
++ [init-loader.el](https://github.com/emacs-jp/init-loader)
 
 # 参照
 + [Emacs実践入門　～思考を直感的にコード化し、開発を加速する (WEB+DB PRESS plus) ](http://www.amazon.co.jp/Emacs%E5%AE%9F%E8%B7%B5%E5%85%A5%E9%96%80-%EF%BD%9E%E6%80%9D%E8%80%83%E3%82%92%E7%9B%B4%E6%84%9F%E7%9A%84%E3%81%AB%E3%82%B3%E3%83%BC%E3%83%89%E5%8C%96%E3%81%97%E3%80%81%E9%96%8B%E7%99%BA%E3%82%92%E5%8A%A0%E9%80%9F%E3%81%99%E3%82%8B-WEB-DB-PRESS-plus/dp/4774150029)
@@ -393,3 +394,4 @@ $ git clone git@github.com:imakado/emoji.git
 + [pallet](https://github.com/rdallasgray/pallet)
 + [Emacs-helm](https://github.com/emacs-helm/helm)
 + [Helm をストレスなく使う](http://d.hatena.ne.jp/a_bicky/20140104/1388822688a)
++ [init-loader.el と package.el を導入して快適 Emacs ライフ](http://qiita.com/catatsuy/items/5f1cd86e2522fd3384a0)

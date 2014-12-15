@@ -19,7 +19,11 @@ bin/*
 .kitchen/
 .kitchen.local.yml
 
-files/default/emacs24/auto-save-list
-files/default/emacs24/undohist
-files/default/emacs24/.cask
-wget-log*
+emacs24/auto-save-list
+emacs24/undohist
+emacs24/.cask
+emacs24/wget-log*
+emacs24/recentf
+emacs24/ac-comphist.dat
+emacs24/var
+emacs24/backups
