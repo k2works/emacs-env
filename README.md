@@ -357,6 +357,13 @@ $ sudo make install
 
 + [helm-gtags.el](https://github.com/syohex/emacs-helm-gtags)
 
+#### ripper-tags で高速化
++ [EmacsのRuby環境でタグを自動生成してタグジャンプ！](http://futurismo.biz/archives/2262)
+
+```
+$ observer ripper.observr
+```
+
 ### フレームワーク専用拡張機能
 #### Rinari
 `M-x package-install RET rinari RET`  

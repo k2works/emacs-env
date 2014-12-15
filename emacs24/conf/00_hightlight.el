@@ -23,4 +23,11 @@
 ;; フェイスを変更する
 (set-face-background 'show-paren-match-face nil)
 (set-face-underline-p 'show-paren-match-face "yellow")
-      
+
+;; シンボルをハイライト
+(require 'auto-highlight-symbol)
+(require 'highlight-symbol)
+(setq highlight-symbol-colors '("DarkOrange" "DodgerBlue1" "DeepPink1"))
+
+(global-set-key (kbd "M-s p") 'highlight-symbol-at-point)
+(global-set-key (kbd "M-s d") 'highlight-symbol-remove-all)
