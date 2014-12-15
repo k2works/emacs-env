@@ -25,6 +25,7 @@
   (ruby-block-mode t))
 ;; ruby-mode-hookに追加
 (add-hook 'ruby-mode-hook 'ruby-mode-hooks)
+(add-hook 'ruby-mode-hook 'hs-minor-mode)
 
 ;; Ruby用Flymakeの設定
 (add-hook 'ruby-mode-hook 'flymake-ruby-load)
@@ -36,4 +37,3 @@
 (define-key global-map (kbd "s-u") 'helm-rails-views)
 (define-key global-map (kbd "s-o") 'helm-rails-specs)
 (define-key global-map (kbd "s-r") 'helm-rails-all)
-    
