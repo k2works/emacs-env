@@ -13,3 +13,6 @@
 [submodule "emacs24/public_repos/html5-el"]
 	path = emacs24/public_repos/html5-el
 	url = git@github.com:hober/html5-el.git
+[submodule "emacs24/public_repos/emoji"]
+	path = emacs24/public_repos/emoji
+	url = git@github.com:imakado/emoji.git

@@ -38,7 +38,7 @@
           (lambda () (flycheck-mode t)))
 
 ;; JSHint with Flymake
-(add-to-list 'load-path "~/.emacs.d/public_reposjshint-mode")
+(add-to-list 'load-path "~/.emacs.d/public_repos/jshint-mode")
 (require 'flymake-jshint)
 (add-hook 'js-mode-hook
           (lambda () (flymake-mode t)))
