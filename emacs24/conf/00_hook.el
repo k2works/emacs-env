@@ -17,7 +17,6 @@
     (setq eldoc-echo-area-use-multiline-p t)
     (turn-on-eldoc-mode)))
 
-;; emacs-lisp-modeのフックをセット
+;; 各メジャーモードのフックをセット
 (add-hook 'emacs-lisp-mode-hook 'elisp-mode-hooks)
 (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
-  

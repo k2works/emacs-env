@@ -2,7 +2,15 @@
 ;; auto-completeの設定
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
-               "~/.emacs.d/elisp/ac-dict")
+               "~/.emacs.d/ac-dict")
+  (defvar my-ac-sources
+    '(ac-source-yasnippet
+      ac-source-abbrev
+      ac-source-dictionary
+      ac-source-words-in-same-mode-buffers))
+  (global-auto-complete-mode 1)
+  (setq ac-use-menu-map t)
+  
   (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
   (ac-config-default))
 
@@ -16,7 +24,7 @@
   ;; ~/.emacs.d/にsnippetsというフォルダを作っておきましょう
   (setq yas-snippet-dirs
         '("~/.emacs.d/snippets" ;; 作成するスニペットはここに入る
-          "~/.emacs.d/.cask/24.4.1/elpa/yasnippet-20141117.327/snippets" ;; 最初から入っていたスニペット(省略可能)
+          "~/.emacs.d/public_repos/yasnippet-snippets"
           ))
   (yas-global-mode 1)
 
@@ -36,4 +44,3 @@
 (when (require 'ac-helm nil t)  ;; Not necessary if using ELPA package
   (global-set-key (kbd "C-:") 'ac-complete-with-helm)
   (define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm))
-        

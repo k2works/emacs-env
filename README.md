@@ -357,6 +357,13 @@ $ sudo make install
 
 + [helm-gtags.el](https://github.com/syohex/emacs-helm-gtags)
 
+#### ripper-tags で高速化
++ [EmacsのRuby環境でタグを自動生成してタグジャンプ！](http://futurismo.biz/archives/2262)
+
+```
+$ observer ripper.observr
+```
+
 ### フレームワーク専用拡張機能
 #### Rinari
 `M-x package-install RET rinari RET`  
@@ -395,3 +402,5 @@ $ git clone git@github.com:imakado/emoji.git
 + [Emacs-helm](https://github.com/emacs-helm/helm)
 + [Helm をストレスなく使う](http://d.hatena.ne.jp/a_bicky/20140104/1388822688a)
 + [init-loader.el と package.el を導入して快適 Emacs ライフ](http://qiita.com/catatsuy/items/5f1cd86e2522fd3384a0)
++ [Set up Javascript development environment in Emacs](http://truongtx.me/2014/02/23/set-up-javascript-development-environment-in-emacs/#javascript-refactoring)
++ [bard/mozrepl](https://github.com/bard/mozrepl/wiki)
