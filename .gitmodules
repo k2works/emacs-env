@@ -1,0 +1,18 @@
+[submodule "emacs24/public_repos/yasnippet-snippets"]
+	path = emacs24/public_repos/yasnippet-snippets
+	url = git@github.com:AndreaCrotti/yasnippet-snippets.git
+[submodule "emacs24/public_repos/anything-rdefs"]
+	path = emacs24/public_repos/anything-rdefs
+	url = git@github.com:mori-dev/anything-rdefs.git
+[submodule "emacs24/public_repos/colorthemes"]
+	path = emacs24/public_repos/colorthemes
+	url = git@github.com:emacs-jp/replace-colorthemes.git
+[submodule "emacs24/public_repos/jshint-mode"]
+	path = emacs24/public_repos/jshint-mode
+	url = git@github.com:daleharvey/jshint-mode.git
+[submodule "emacs24/public_repos/emoji/emacs24/public_repos/emoji"]
+	path = emacs24/public_repos/emoji/emacs24/public_repos/emoji
+	url = git@github.com:imakado/emoji.git
+[submodule "emacs24/public_repos/html5-el"]
+	path = emacs24/public_repos/html5-el
+	url = git@github.com:hober/html5-el.git
