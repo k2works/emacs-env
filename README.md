@@ -404,3 +404,5 @@ $ git clone git@github.com:imakado/emoji.git
 + [init-loader.el と package.el を導入して快適 Emacs ライフ](http://qiita.com/catatsuy/items/5f1cd86e2522fd3384a0)
 + [Set up Javascript development environment in Emacs](http://truongtx.me/2014/02/23/set-up-javascript-development-environment-in-emacs/#javascript-refactoring)
 + [bard/mozrepl](https://github.com/bard/mozrepl/wiki)
++ [EmacsでRubyの開発環境をさらにめちゃガチャパワーアップしたまとめ](http://futurismo.biz/archives/2213)
++ [モダンなEmacsを求めて (6) Rubyについて](http://block-given.hatenablog.com/entry/2014/11/12/005657)

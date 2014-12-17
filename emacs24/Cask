@@ -17,7 +17,6 @@
 (depends-on "descbinds-helm")
 (depends-on "drag-stuff")
 (depends-on "elscreen")
-(depends-on "enh-ruby-mode")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
 (depends-on "f")

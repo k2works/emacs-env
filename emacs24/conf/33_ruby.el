@@ -5,10 +5,41 @@
 (add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+
+;; ruby-modeのインデント設定
+(setq ruby-indent-level 3 ; インデント幅を3に。初期値は2
+      ruby-deep-indent-paren-style nil ; 改行時のインデントを調整する
+      ;; ruby-mode実行時にindent-tabs-modeを設定値に変更
+      ruby-indent-tabs-mode t) ; タブ文字を使用する。初期値はnil
+;; 括弧の自動挿入
+(require 'ruby-end)
+(add-hook 'ruby-mode-hook
+          '(lambda ()
+             (abbrev-mode 1)
+             (electric-pair-mode t)
+             (electric-indent-mode t)
+             (electric-layout-mode t)))
+;; インタラクティブRubyを利用する
+(require 'inf-ruby)
+(add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
+(setq inf-ruby-default-implementation "pry")
+(setq inf-ruby-eval-binding "Pry.toplevel_binding")
+(add-hook 'inf-ruby-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'after-init-hook 'inf-ruby-switch-setup)
+
+;; ruby-mode-hook用の関数を定義
+(defun ruby-mode-hooks ()
+  (inf-ruby-keys)
+  (ruby-end-mode t)
+  (ruby-block-mode t))
+;; ruby-mode-hookに追加
+(add-hook 'ruby-mode-hook 'hs-minor-mode)
+
 ;; ruby-block.el --- highlight matching block
 (require 'ruby-block)
 (ruby-block-mode t)
 (setq ruby-block-highlight-toggle t)
+
 ;; rcodetools
 (require 'rcodetools)
 (setq rct-find-tag-if-available nil)
@@ -53,40 +84,17 @@
 (define-key ruby-mode-map (kbd "C-c C-c") (kbd "C-c c C-m"))
 (setq compilation-window-height 15) ;; default window height is 15
 ;; robe
+(require 'robe)
+(add-hook 'ruby-mode-hook 'robe-mode)
+(require 'helm-robe)
+(custom-set-variables '(robe-completing-read-func 'helm-robe-completing-read))
+
 (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
 (autoload 'robe-ac-setup "robe-ac" "robe auto-complete" nil nil)
 (add-hook 'robe-mode-hook 'robe-ac-setup)
 
 (custom-set-variables
   '(robe-completing-read-func 'helm-robe-completing-read))
-
-;; ruby-modeのインデント設定
-(setq ruby-indent-level 3 ; インデント幅を3に。初期値は2
-  ruby-deep-indent-paren-style nil ; 改行時のインデントを調整する
-  ;; ruby-mode実行時にindent-tabs-modeを設定値に変更
-  ruby-indent-tabs-mode t) ; タブ文字を使用する。初期値はnil
-;; 括弧の自動挿入
-(require 'ruby-end)
-(add-hook 'ruby-mode-hook
-          '(lambda ()
-             (abbrev-mode 1)
-             (electric-pair-mode t)
-             (electric-indent-mode t)
-             (electric-layout-mode t)))
-;; インタラクティブRubyを利用する
-(autoload 'run-ruby "inf-ruby"
-  "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-  "Set local key defs for inf-ruby in ruby-mode")
-
-;; ruby-mode-hook用の関数を定義
-(defun ruby-mode-hooks ()
-  (inf-ruby-keys)
-  (ruby-end-mode t)
-  (ruby-block-mode t))
-;; ruby-mode-hookに追加
-(add-hook 'ruby-mode-hook 'ruby-mode-hooks)
-(add-hook 'ruby-mode-hook 'hs-minor-mode)
 
 ;; Ruby用Flymakeの設定
 (add-hook 'ruby-mode-hook 'flymake-ruby-load)
