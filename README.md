@@ -406,3 +406,4 @@ $ git clone git@github.com:imakado/emoji.git
 + [bard/mozrepl](https://github.com/bard/mozrepl/wiki)
 + [EmacsでRubyの開発環境をさらにめちゃガチャパワーアップしたまとめ](http://futurismo.biz/archives/2213)
 + [モダンなEmacsを求めて (6) Rubyについて](http://block-given.hatenablog.com/entry/2014/11/12/005657)
++ [emacsのruby環境をセットアップする](http://blog.10rane.com/2014/09/01/set-up-ruby-mode-of-emacs/)

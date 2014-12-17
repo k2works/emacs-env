@@ -83,3 +83,5 @@
 (depends-on "wgrep")
 (depends-on "yaml-mode")
 (depends-on "yasnippet")
+(depends-on "fuzzy")
+(depends-on "popup")

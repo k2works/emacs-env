@@ -86,15 +86,12 @@
 ;; robe
 (require 'robe)
 (add-hook 'ruby-mode-hook 'robe-mode)
+(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
+(add-hook 'robe-mode-hook 'ac-robe-setup)
+
 (require 'helm-robe)
 (custom-set-variables '(robe-completing-read-func 'helm-robe-completing-read))
-
-(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-(autoload 'robe-ac-setup "robe-ac" "robe auto-complete" nil nil)
-(add-hook 'robe-mode-hook 'robe-ac-setup)
-
-(custom-set-variables
-  '(robe-completing-read-func 'helm-robe-completing-read))
 
 ;; Ruby用Flymakeの設定
 (add-hook 'ruby-mode-hook 'flymake-ruby-load)

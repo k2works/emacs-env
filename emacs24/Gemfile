@@ -10,3 +10,4 @@ gem 'pry'
 gem 'pry-doc'
 gem 'rubocop'
 gem 'ruby-lint'
+gem "method_source", ">= 0.8.2"

@@ -2,7 +2,7 @@
 ;; auto-completeの設定
 (when (require 'auto-complete-config nil t)
   (add-to-list 'ac-dictionary-directories
-               "~/.emacs.d/ac-dict")
+               "~/.emacs.d/.cask/24.4.1/elpa/auto-complete-20141208.809/dict")
   (defvar my-ac-sources
     '(ac-source-yasnippet
       ac-source-abbrev
@@ -10,10 +10,10 @@
       ac-source-words-in-same-mode-buffers))
   (global-auto-complete-mode 1)
   (setq ac-use-menu-map t)
-  
+
   (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
   (ac-config-default))
-
+  
 ;; yasnippet
 (require 'cl)
 ;; 問い合わせを簡略化 yes/no を y/n
