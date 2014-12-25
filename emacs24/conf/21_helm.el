@@ -43,4 +43,10 @@
                         ;; and not required because the directory name is prepended
                         (substring input-pattern 1)
                       (concat ".*" input-pattern)))))))
+
+(require 'helm-etags+)
+(global-set-key "\M-." 'helm-etags+-select)
+(global-set-key "\M-*" 'helm-etags+-history)
+(global-set-key "\M-," 'helm-etags+-history-action-go-back)
+(global-set-key "\M-/" 'helm-etags+-history-action-go-forward)
     
