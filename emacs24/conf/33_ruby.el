@@ -135,3 +135,7 @@
 (define-key global-map (kbd "s-u") 'helm-rails-views)
 (define-key global-map (kbd "s-o") 'helm-rails-specs)
 (define-key global-map (kbd "s-r") 'helm-rails-all)
+
+(require 'rinari)
+(require 'rspec-mode)
+(custom-set-variables '(rspec-use-rake-flag nil))
