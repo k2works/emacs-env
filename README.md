@@ -17,18 +17,7 @@
 
 # 詳細
 ## <a name="1">セットアップ</a>
-### Linux
-```bash
-$ vagrant up
-$ vagrant ssh-config --host emacs-env >> ~/.ssh/config
-$ knife solo prepare emacs-env --bootstrap-version 11.10.4
-$ knife solo cook emacs-env
-```
-### MacOS
-```bash
-$ brew install --cocoa --japanese --with-gnutls -srgb emacs
-$ brew linkapps
-```
++ [レシピ](https://github.com/k2works/emacs-cookbook)
 
 ## <a name="2">操作</a>
 ### コマンド
