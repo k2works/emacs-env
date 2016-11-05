@@ -4,6 +4,13 @@
 ;; C-hをバックスペースにする
 ;; ?\C-?はDELのキーシーケンス
 ;;(keyboard-translate ?\C-h ?\C-?)
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (define-key key-translation-map [?\C-h] [?\C-?])
 ;; 改行と同時にインデントする
 ;; C-mにnewline-and-indentを割り当てる
@@ -16,7 +23,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Caskの設定
 (when (eq system-type 'gnu/linux)
-(require 'cask "~/.cask/cask.el")
+  (require 'cask "~/.cask/cask.el")
 (cask-initialize))
 
 (when (require 'cask nil t)
@@ -24,6 +31,9 @@
 
 (when (require 'pallet nil t)
   (pallet-mode t))
+
+(when (require 'cask "/usr/local/opt/cask/cask.el" t)
+(cask-initialize))
 
 ;;; パスの設定
 (add-to-list 'exec-path "/opt/local/bin")
@@ -58,6 +68,7 @@
 ;; 文字コードを指定する
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
+
 ;; ファイル名の扱い
 ;; Mac OS Xの場合のファイル名の設定
 (when (eq system-type 'darwin)
